@@ -16,14 +16,14 @@
 
 ## Currently Work On
 
-- [] Refactoring much of the code for greater readability and modularity.
+- [ ] Refactoring much of the code for greater readability and modularity.
   CDemo was built "on-the-go" &mdash; i.e., as I took notes in class, I
   sketched diagrams by hand, then in the evenings quickly wrote code for
   generating the diagrams with D3. Accordingly, there's a good amount of
   spaghetti code and magic numbers that need to be cleaned. This is a
   long-term process, and I spend a little bit of time each day making
   improvements and optimizations where I see them.
-- [] Planning a new module for generating 3-dimensional plots. I almost
+- [ ] Planning a new module for generating 3-dimensional plots. I almost
   exclusively use Python, Mathematica, or LaTeX to create 3-dimensional
   plots, but with ThreeJS's continued performance improvements, I'm now
   taking more seriously the goal of having a dedicated CDemo module for
