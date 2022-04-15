@@ -1,0 +1,16 @@
+{
+  "name": "cdemo",
+  "version": "1.0.0",
+  "description": "A library for math and computer science diagrams",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "d3": "^7.4.4"
+  }
+}
