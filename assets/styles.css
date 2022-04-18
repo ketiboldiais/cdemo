@@ -1,0 +1,248 @@
+html {
+	font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+		"Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 0.5em 1em;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	flex: 1 0 auto;
+}
+
+header {
+	position: sticky;
+	padding: 1em 0 5em 0;
+	text-align: left;
+	top: 0;
+}
+
+footer {
+	display: flex;
+	justify-content: center;
+	flex-shrink: 0;
+	padding: 1em 0;
+}
+
+
+article {
+	margin-top: 2em;
+}
+
+figure {
+	margin: 5%;
+	display: block;
+}
+figure div {
+	flex: 1;
+}
+.demo-container {
+	display: flex;
+	justify-content: center;
+}
+
+
+/* Language - JavaScript */
+pre.language-javascript {
+	color: white;
+	background-color: rgb(32, 32, 32);
+}
+code[class="language-javascript"]>.token.dom {color: rgb(195, 115, 3);}
+code[class="language-javascript"]>.token.comment,
+code[class="language-javascript"]>.token.block-comment {
+	color: rgb(163, 163, 163);
+}
+
+code[class="language-javascript"] .token.punctuation {
+	color: white;
+}
+
+code[class="language-javascript"]>.token.string,
+code[class="language-javascript"]>.token.char,
+code[class="language-javascript"]>.token.boolean,
+code[class="language-javascript"]>.token.number {
+	color: rgb(238, 172, 255);
+}
+code[class="language-javascript"]>.token.function {
+	color: rgb(255, 195, 42);
+}
+code[class="language-javascript"]>.token.operator {
+	color: rgb(255, 165, 101);
+}
+
+code[class="language-javascript"]>.token.property {
+	color: rgb(228, 237, 255);
+}
+
+code[class="language-javascript"]>.token.regex,
+
+code[class="language-javascript"]>.token.class-name,
+code[class="language-javascript"]>.token.symbol {
+	color: rgb(255, 102, 46);
+}
+code[class="language-javascript"]>.token.keyword {
+	color: cyan;
+}
+code[class="language-javascript"]>.token.control-flow {
+	color: greenyellow;
+	font-style: italic;
+}
+code[class="language-javascript"] .token.punctuation.brace-level-1,
+code[class="language-javascript"] .token.punctuation.brace-level-5,
+code[class="language-javascript"] .token.punctuation.brace-level-9 {
+	color: rgb(255, 123, 52);
+	opacity: 1;
+}
+code[class="language-javascript"]> .token.punctuation.brace-level-10,
+code[class="language-javascript"]> .token.punctuation.brace-level-2,
+code[class="language-javascript"]> .token.punctuation.brace-level-6 {
+	color: rgb(16, 255, 175);
+	opacity: 1;
+}
+code[class="language-javascript"]> .token.punctuation.brace-level-11,
+code[class="language-javascript"]> .token.punctuation.brace-level-3,
+code[class="language-javascript"]> .token.punctuation.brace-level-7 {
+	color: rgb(86, 136, 255);
+	opacity: 1;
+}
+code[class="language-javascript"]> .token.punctuation.brace-level-12,
+code[class="language-javascript"]> .token.punctuation.brace-level-4,
+code[class="language-javascript"]> .token.punctuation.brace-level-8 {
+	color: rgb(255, 131, 255);
+	opacity: 1;
+}
+/* Line numbers and buttons for code */
+pre {
+	width: auto;
+	height: auto;
+	font-family: var(--mono);
+	text-align: left;
+	font-size: 0.7rem;
+	white-space:pre;
+	font-weight: normal;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.3;
+	-moz-tab-size: 2;
+	-o-tab-size: 2;
+	tab-size: 2;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre {
+	margin: 0.5em auto;
+	padding: 0.5rem 0.6rem;
+	overflow: auto;
+	box-shadow: 0 2px 6px 0 rgba(0,0,0,0.2);
+	border-radius: 0.3em !important;
+}
+
+pre[class*="language-"].line-numbers {
+	position: relative;
+	padding-left: 3.8em;
+	counter-reset: linenumber;
+}
+pre[class*="language-"].line-numbers > code {
+	position: relative;
+	white-space: inherit;
+}
+.line-numbers .line-numbers-rows {
+	position: absolute;
+	pointer-events: none;
+	top: 0;
+	font-size: 100%;
+	left: -4em;
+	width: 3em;
+	letter-spacing: -1px;
+	border-right: 1px solid #999;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.line-numbers-rows > span {
+	display: block;
+	counter-increment: linenumber;
+}
+.line-numbers-rows > span:before {
+	content: counter(linenumber);
+	color: #999;
+	display: block;
+	padding-right: 0.8em;
+	text-align: right;
+}
+div.code-toolbar {
+	position: relative;
+}
+div.code-toolbar > .toolbar {
+	position: absolute;
+	z-index: 10;
+	top: 0.3em;
+	right: 0.2em;
+	transition: opacity 0.3s ease-in-out;
+	opacity: 0;
+}
+div.code-toolbar:hover > .toolbar {
+	opacity: 1;
+}
+div.code-toolbar:focus-within > .toolbar {
+	opacity: 1;
+}
+div.code-toolbar > .toolbar > .toolbar-item {
+	display: inline-block;
+}
+div.code-toolbar > .toolbar > .toolbar-item > a {
+	cursor: pointer;
+}
+div.code-toolbar > .toolbar > .toolbar-item > button {
+	background: 0 0;
+	margin: 0 3px;
+	border: 0;
+	color: inherit;
+	font: inherit;
+	line-height: normal;
+	overflow: visible;
+	padding: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+div.code-toolbar > .toolbar > .toolbar-item > a,
+div.code-toolbar > .toolbar > .toolbar-item > button,
+div.code-toolbar > .toolbar > .toolbar-item > span {
+	font-family: var(--mono);
+	color: #bbb;
+	font-size: 0.8em;
+	padding: 0 0.5em;
+	background: #f5f2f0;
+	background: rgba(224, 224, 224, 0.2);
+	box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+	border-radius: 0.5em;
+}
+div.code-toolbar > .toolbar > .toolbar-item > a:focus,
+div.code-toolbar > .toolbar > .toolbar-item > a:hover,
+div.code-toolbar > .toolbar > .toolbar-item > button:focus,
+div.code-toolbar > .toolbar > .toolbar-item > button:hover,
+div.code-toolbar > .toolbar > .toolbar-item > span:focus,
+div.code-toolbar > .toolbar > .toolbar-item > span:hover {
+	color: inherit;
+	text-decoration: none;
+}

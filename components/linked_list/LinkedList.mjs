@@ -1,9 +1,11 @@
+import D3Base from "../../core/d3_base/D3Base.mjs";
+
 export class LinkedList extends D3Base {
 	constructor(obj) {
 		super(obj);
-		this.containerWidthDefault = "60%";
+		this.containerWidthDefault = "80%";
 
-		this.containerHeightDefault = "50%";
+		this.containerHeightDefault = "0%";
 
 		this.D3_CONTAINER_WIDTH = this.OBJ.width
 			? `${this.OBJ.width}%`
@@ -17,7 +19,7 @@ export class LinkedList extends D3Base {
 		this.SVG_WIDTH = this.OBJ.svg_width ? this.OBJ.svg_width : 300;
 
 		// Set the SVG's height
-		this.SVG_HEIGHT = this.OBJ.svg_height ? this.OBJ.svg_height : 250;
+		this.SVG_HEIGHT = this.OBJ.svg_height ? this.OBJ.svg_height : 30;
 
 		// Set the SVG's dimensions
 		this.DIMENSIONS = {
@@ -27,7 +29,7 @@ export class LinkedList extends D3Base {
 
 		// The SVG container is <div> that wraps the SVG. This allows for resizing.
 		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "inline-block")
+			.style("display", "block")
 			.style("position", "relative")
 			.style("width", this.D3_CONTAINER_WIDTH)
 			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
@@ -64,9 +66,9 @@ export class LinkedList extends D3Base {
 			.attr("d", "M 0 0 L 10 5 L 0 10 z")
 			.attr("stroke", "#000")
 			.attr("stroke-width", 2);
-		this.NODES = this.OBJ.nodes;
+		this.NODES = this.OBJ.data;
 		this.isIndexed = this.OBJ.indexed ? this.OBJ.indexed : false;
-		this.NODE_COUNT = this.OBJ.nodes.length;
+		this.NODE_COUNT = this.OBJ.data.length;
 		this.MARGIN = {
 			top: 10,
 			right: 30,
@@ -140,11 +142,11 @@ export class LinkedList extends D3Base {
 			.attr("fill", this.COLORS.dataFieldStrokeColor)
 			.attr("text-anchor", "middle")
 			.style("font-size", "7px")
-			.style("font-family", "Fira")
+			.style("font-family", "")
 			.attr("x", this.NODE.width / 2)
 			.attr("y", this.NODE.height / 2)
 			.attr("dy", "0.3em")
-			.text((d) => d.data);
+			.text((d) => d.val);
 
 		// Indexing
 		if (this.isIndexed) {
@@ -196,7 +198,7 @@ export class LinkedList extends D3Base {
 			.append("text")
 			.attr("text-anchor", "middle")
 			.style("font-size", "9px")
-			.style("font-family", "Fira")
+			.style("font-family", "system-ui")
 			.attr("x", -this.SCALE.bandwidth() / 4)
 			.attr("y", -4)
 			.text((d, i) => d.annotate)

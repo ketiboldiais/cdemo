@@ -1,9 +1,11 @@
-export class D3Base extends CSMD {
+import CSMD from "../csmd/csmd.mjs";
+
+export default class D3Base extends CSMD {
 	constructor(obj) {
 		super(obj);
 
 		this.styles = {
-			font: this.OBJ.styles ? this.OBJ.styles?.font : "Fira",
+			font: this.OBJ.styles ? this.OBJ.styles?.font : "system-ui",
 			fontSize: this.OBJ.styles ? this.OBJ.styles?.fontSize : "0.7rem",
 		};
 

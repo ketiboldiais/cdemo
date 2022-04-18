@@ -1,4 +1,5 @@
-export class CSMD {
+
+export default class CSMD {
 	constructor(obj) {
 		this.OBJ = obj;
 
@@ -79,7 +80,7 @@ export class CSMD {
 		};
 
 		this.fonts = {
-			Mono: "Fira",
+			Mono: "system-ui",
 			Serif: "CMU",
 		};
 	}

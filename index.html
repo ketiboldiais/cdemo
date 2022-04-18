@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>CDemo</title>
+		<link rel="stylesheet" href="./assets/styles.css" />
+	</head>
+	<body>
+		<header>
+			<h1>CDemo</h1>
+		</header>
+		<main>
+			<p>
+				CDemo is a JavaScript library for rendering data structure diagrams
+				and 2-dimensional plots. Below are some demos and API
+				specifications.
+			</p>
+			<article id="linked_lists">
+				<h2>Linked Lists</h2>
+				<p>Here's a linked list:</p>
+				<figure>
+					<div id="linked_list"></div>
+				</figure>
+				<p>The rendering code:</p>
+				<pre class="language-javascript"><code>
+					import { cdemo } from "../cdemo/cdemo.mjs";
+					
+					const linked_list = cdemo.linkedList({
+						id: "linked_list",
+						data: [
+							{ val: 2 },
+							{ val: 3 },
+							{ val: 9 },
+							{ val: 11 },
+							{ val: 17 },
+							{ val: 20 },
+						],
+					});
+				</code></pre>
+			</article>
+		</main>
+		<footer>
+			<span>Ketib Oldiais | &copy; 2021</span>
+		</footer>
+		<script src="./assets/prism.js"></script>
+		<script src="https://d3js.org/d3.v7.min.js"></script>
+		<script type="module" src="./cdemo/cdemo.mjs"></script>
+		<script type="module" src="./assets/demo.js"></script>
+	</body>
+</html>
+
