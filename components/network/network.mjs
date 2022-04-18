@@ -1,3 +1,5 @@
+import D3Base from "../../core/d3_base/D3Base.mjs";
+
 export class Network extends D3Base {
 	constructor(obj) {
 		super(obj);
@@ -32,7 +34,7 @@ export class Network extends D3Base {
 
 		// The SVG container is <div> that wraps the SVG. This allows for resizing.
 		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "inline-block")
+			.style("display", "block")
 			.style("position", "relative")
 			.style("width", this.D3_CONTAINER_WIDTH)
 			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
@@ -48,7 +50,10 @@ export class Network extends D3Base {
 					this.DIMENSIONS.height + this.MARGIN.top + this.MARGIN.bottom
 				}`,
 			)
-			.classed("svg-content-responsive", true)
+			.style('display', 'inline-block')
+			.style('position', 'absolute')
+			.style('top', '0')
+			.style('left', '0')
 			.append("g")
 			.attr(
 				"transform",
@@ -150,7 +155,7 @@ export class Network extends D3Base {
 			.append("text")
 			.attr("text-anchor", "middle")
 			.attr("fill", this.COLORS.edgeLabelColor)
-			.style("font-family", "Fira")
+			.style("font-family", "system-ui")
 			.style("font-size", "0.65rem")
 			.text((d) => d.label);
 
@@ -195,7 +200,7 @@ export class Network extends D3Base {
 			.attr("text-anchor", "middle")
 			.attr("dx", "-1.3em")
 			.attr("fill", this.COLORS.textColor)
-			.style("font-family", "Fira")
+			.style("font-family", "system-ui")
 			.style("font-size", "0.6rem");
 
 		this.FORCE.on("tick", function () {

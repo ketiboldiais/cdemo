@@ -1,9 +1,11 @@
+import D3Base from "../../core/d3_base/D3Base.mjs";
+
 export class Plot extends D3Base {
 	constructor(obj) {
 		super(obj);
 		this.containerWidthDefault = "60%";
 
-		this.containerHeightDefault = "50%";
+		this.containerHeightDefault = "0%";
 
 		this.D3_CONTAINER_WIDTH = this.OBJ.width
 			? `${this.OBJ.width}%`
@@ -27,7 +29,7 @@ export class Plot extends D3Base {
 
 		// The SVG container is <div> that wraps the SVG. This allows for resizing.
 		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "inline-block")
+			.style("display", "block")
 			.style("position", "relative")
 			.style("width", this.D3_CONTAINER_WIDTH)
 			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
@@ -96,7 +98,7 @@ export class Plot extends D3Base {
 		};
 		this.FONTS = {
 			serif: "CMU",
-			mono: "Fira",
+			mono: "system-ui",
 			size: {
 				tiny: "0.45rem",
 				small: "0.6rem",

@@ -1,3 +1,5 @@
+import D3Base from "../../core/d3_base/D3Base.mjs";
+
 export class Graph extends D3Base {
 	constructor(obj) {
 		super(obj);
@@ -18,10 +20,10 @@ export class Graph extends D3Base {
 		this.SVG_HEIGHT = this.OBJ.svg_height ? this.OBJ.svg_height : 150;
 
 		this.MARGIN = {
-			top: 10,
-			right: 10,
-			bottom: 10,
-			left: 10,
+			top: 20,
+			right: 20,
+			bottom: 20,
+			left: 20,
 		};
 
 		this.DIMENSIONS = {
@@ -30,7 +32,7 @@ export class Graph extends D3Base {
 		};
 
 		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "inline-block")
+			.style("display", "block")
 			.style("position", "relative")
 			.style("width", this.D3_CONTAINER_WIDTH)
 			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
@@ -46,7 +48,10 @@ export class Graph extends D3Base {
 					this.DIMENSIONS.height + this.MARGIN.top + this.MARGIN.bottom
 				}`,
 			)
-			.classed("svg-content-responsive", true)
+			.style("display", "inline-block")
+			.style("position", "absolute")
+			.style("top", "0")
+			.style("left", "0")
 			.append("g")
 			.attr(
 				"transform",
@@ -146,7 +151,7 @@ export class Graph extends D3Base {
 			.attr("r", this.ATTRIBUTES.radius);
 		node
 			.append("text")
-			.attr("font-family", "Fira")
+			.attr("font-family", "system-ui")
 			.attr("fill", this.COLORS.textColor)
 			.attr("dy", "1em")
 			.attr("font-size", `${this.ATTRIBUTES.fontSize}rem`)

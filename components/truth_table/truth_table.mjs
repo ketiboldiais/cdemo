@@ -1,3 +1,5 @@
+import CSMD from "../../core/csmd/csmd.mjs";
+
 export class TruthTable extends CSMD {
 	constructor(obj) {
 		super(obj);
@@ -5,7 +7,7 @@ export class TruthTable extends CSMD {
 		this.color_array = ["#F9ECEC", "#F0D9DA", "#C8D9EB", "#ECF2F9"];
 
 		this.TABLE_styles = {
-			margin: "0 auto",
+			margin: "auto",
 			fontFamily: "system-ui",
 			fontSize: "0.7rem",
 			border: "none",

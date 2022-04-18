@@ -1,3 +1,5 @@
+import CSMD from "../../core/csmd/csmd.mjs";
+
 export class Matrix extends CSMD {
 	constructor(obj) {
 		super(obj);
