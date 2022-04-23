@@ -10,21 +10,23 @@
 		<title>CDemo</title>
 		<link rel="stylesheet" href="./assets/styles.css" />
 	</head>
-	<body>
+	<body class="line-numbers">
 		<header>
-			<h1>CDemo</h1>
+			<h1>CDemo.</h1>
 		</header>
 		<main>
 			<p>
-				CDemo is a JavaScript library for rendering data structure diagrams
-				and 2-dimensional plots. Below are some demos and API
-				specifications.
+				CDemo is an open source, MIT-licensed JavaScript library for
+				rendering data structure diagrams and 2-dimensional plots. Below
+				are some demos and API specifications.
 			</p>
 
 			<article id="plot">
 				<h2>Plotter</h2>
 				<p>CDemo can plot some simple graphs:</p>
-				<div id="sinePlot"></div>
+				<figure>
+					<div id="sinePlot"></div>
+				</figure>
 				<p>Code:</p>
 				<pre class="language-javascript"><code>
 					import { cdemo } from "../cdemo/cdemo.mjs";
@@ -35,11 +37,26 @@
 						domain    :  [-10, 10],
 						range     :  [-4, 4],
 						precision :  100,
-					})
+					});
 				</code></pre>
 			</article>
 
-			<article id="sequences">
+			<article id="plot3d">
+				<h2>3-Dimensional Plots</h2>
+				<p>It can also plot slightly more complex ones:</p>
+				<figure>
+					<div id="plot3D"></div>
+				</figure>
+				<p>The code:</p>
+				<pre class="language-javascript"><code>
+					cdemo.plot3d({
+						id: "plot3D",
+						fn: (x, y) => (x**2 - y**2) * 0.2
+					});
+				</code></pre>
+			</article>
+
+			<article id="arrays">
 				<h2>Arrays</h2>
 				<p>
 					Arrays are sequential data structures, where data values are
@@ -58,8 +75,7 @@
 							{ val: 2 }, { val: 4 }, { val: 1 },
 							{ val: 3 }, { val: 8 }, { val: 0 },
 							{ val: 9 }, { val: 7 }, { val: 5 },
-						],
-					}).render();
+					]});
 				</code></pre>
 			</article>
 
@@ -82,8 +98,7 @@
 							{ val: 11 },
 							{ val: 17 },
 							{ val: 20 },
-						]
-					});
+					]});
 				</code></pre>
 			</article>
 
@@ -110,16 +125,15 @@
 							"clock", "set", "reset", "set*", "reset*", "Q", "Q",
 						],
 						rows: [
-							[0, 0, 0, 1, 1, "NC", "NC"]
-							[0, 0, 1, 1, 1, "NC", "NC"]
-							[0, 1, 0, 1, 1, "NC", "NC"]
-							[0, 1, 1, 1, 1, "NC", "NC"]
-							[1, 0, 0, 1, 1, "NC", "NC"]
-							[1, 0, 1, 1, 0, 0   , 1   ]
-							[1, 1, 0, 0, 1, 1   , 0   ]
+							[0, 0, 0, 1, 1, "NC", "NC"],
+							[0, 0, 1, 1, 1, "NC", "NC"],
+							[0, 1, 0, 1, 1, "NC", "NC"],
+							[0, 1, 1, 1, 1, "NC", "NC"],
+							[1, 0, 0, 1, 1, "NC", "NC"],
+							[1, 0, 1, 1, 0, 0   , 1   ],
+							[1, 1, 0, 0, 1, 1   , 0   ],
 							[1, 1, 1, 0, 0, "⊥" , "⊥" ]
-						],
-					});
+					]});
 				</code></pre>
 			</article>
 
@@ -150,8 +164,7 @@
 							[1, 1, 1, 1, 0, 0, 0, 1, 0],
 							[1, 0, 0, 1, 0, 0, 0, 1, 0],
 							[1, 0, 0, 1, 0, 0, 1, 1, 1]
-						],
-					});
+					]});
 				</code></pre>
 			</article>
 
@@ -166,21 +179,22 @@
 				</figure>
 				<p>Code:</p>
 				<pre class="language-javascript"><code>
+					import { cdemo } from "../cdemo/cdemo.mjs";
+
 					cdemo.network({
-						id: "network",
-						height: 48,
-						width: 95,
-						collide: 22,
-						distance: 9,
-						strength: -30,
-						svg_width: 530,
+						id        : "network",
+						height    : 48,
+						width     : 95,
+						collide   : 22,
+						distance  : 9,
+						strength  : -30,
+						svg_width : 530,
 						svg_height: 255,
-						data: [
+						data      : [
 							{
-								source: "Conekt",
-								target: "AT&T",
-								tattr: { radial: 30 },
-								sattr: { fill: "pink", stroke: "firebrick" },
+								source: "Conekt", target: "AT&T", 
+								 tattr: { radial: 30 },
+								 sattr: { fill  : "pink", stroke: "firebrick" },
 							},
 							{ source: "house1",  target: "n1"     },
 							{ source: "house2",  target: "n1"     },
@@ -197,17 +211,18 @@
 							{ source: "town3" ,  target: "Conekt" },
 							{ source: "town4" ,  target: "Conekt" },
 							{ source: "town5" ,  target: "Conekt" },
-							{ source: "AT&T"  ,  target: "Comcast", tattr: { radial: 30 } },
+							{ source: "AT&T"  ,  target: "Comcast", 
+							   tattr: { radial: 30 }
+							},
 							{ source: "WireUp",  target: "Comcast",
-								sattr: { fill: "pink", stroke: "firebrick" },
+								 sattr: { fill: "pink", stroke: "firebrick" },
 							},
 							{ source: "town105", target: "WireUp" },
 							{ source: "town106", target: "WireUp" },
 							{ source: "town107", target: "WireUp" },
 							{ source: "town108", target: "WireUp" },
 							{ source: "town109", target: "WireUp" },
-						],
-					});
+					]});
 				</code></pre>
 				<p>Graphs are rendered with curves:</p>
 				<figure>
@@ -215,12 +230,14 @@
 				</figure>
 				<p>Code:</p>
 				<pre class="language-javascript"><code>
+					import { cdemo } from "../cdemo/cdemo.mjs";
+
 					cdemo.graph({
 						id: "graph",
 						height: 50,
 						strength: -40,
 						svg_height: 315,
-						color: "yellowScheme",
+						color: "darkRedScheme",
 						data: [
 							{ source: "house1", target: "house2" },
 							{ source: "house2", target: "house1" },
@@ -241,6 +258,36 @@
 							{ source: "house3", target: "house7" },
 						],
 					});
+				</code></pre>
+			</article>
+
+			<article id="trees">
+				<h2>Trees</h2>
+				<p>
+					Trees are a fundamental data structure in computer science.
+					Folder hierarchies, the DOM, decision trees in AI &mdash; they
+					all rely on some notion of a tree:
+				</p>
+				<figure>
+					<div id="binaryTree"></div>
+				</figure>
+				<p>Code:</p>
+				<pre class="language-javascript"><code>
+					cdemo.tree({
+						id: "binaryTree",
+						narrow: 50,
+						edgeLength: 110,
+						data: [
+							{ child: "a", parent: ""  },
+							{ child: "b", parent: "a" },
+							{ child: "c", parent: "a" },
+							{ child: "d", parent: "b" },
+							{ child: "e", parent: "b" },
+							{ child: "h", parent: "d" },
+							{ child: "i", parent: "d" },
+							{ child: "j", parent: "i" },
+							{ child: "k", parent: "i" },
+					]})
 				</code></pre>
 			</article>
 		</main>

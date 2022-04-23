@@ -3,71 +3,14 @@ import D3Base from "../../core/d3_base/D3Base.mjs";
 export class Sequence extends D3Base {
 	constructor(obj) {
 		super(obj);
+		this.margins = () => this.setMargin(20, 5, 20, 20);
 		this.FRAME_COUNT = this.OBJ.data.length;
+		this.svg = () =>
+			this.setSVGDimensions(this.FRAME_COUNT * 30, this.FRAME_COUNT * 30);
+		this.SVG_CONTAINER = this.generateSVGContainer(50, 15);
+		this.SVG = this.generateSVG();
+
 		this.SEQUENCE_NAME = this.OBJ.name;
-		this.userMargin = this.OBJ.margin ? this.OBJ.margin : false;
-
-		this.containerWidthDefault = "50%";
-		this.containerHeightDefault = "15%";
-
-		this.D3_CONTAINER_WIDTH = this.OBJ.width
-			? `${this.OBJ.width}%`
-			: this.containerWidthDefault;
-
-		this.D3_CONTAINER_HEIGHT = this.OBJ.height
-			? `${this.OBJ.height}%`
-			: this.containerHeightDefault;
-
-		// Set the SVG's width
-		this.SVG_WIDTH = this.OBJ.svg_width
-			? this.OBJ.svg_width
-			: this.FRAME_COUNT * 30;
-
-		// Set the SVG's height
-		this.SVG_HEIGHT = this.OBJ.svg_height
-			? this.OBJ.svg_height
-			: this.FRAME_COUNT * 30;
-
-		this.MARGIN = {
-			top: this.userMargin[0] ? this.userMargin[0] : 20,
-			left: this.userMargin[1] ? this.userMargin[1] : 5,
-			bottom: this.userMargin[2] ? this.userMargin[2] : 20,
-			right: this.userMargin[3] ? this.userMargin[3] : 20,
-		};
-
-		// Set the SVG's dimensions
-		this.DIMENSIONS = {
-			width: this.SVG_WIDTH - this.MARGIN.left - this.MARGIN.right,
-			height: this.SVG_HEIGHT - this.MARGIN.top - this.MARGIN.bottom,
-		};
-
-		// The SVG container is <div> that wraps the SVG. This allows for resizing.
-		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "inline-block")
-			.style("position", "relative")
-			.style("width", this.D3_CONTAINER_WIDTH)
-			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
-			.style("overflow", "hidden");
-
-		this.SVG = this.SVG_CONTAINER.append("svg")
-			.attr("preserveAspectRatio", "xMinYMin meet")
-			.attr(
-				"viewBox",
-				`0 0 ${
-					this.DIMENSIONS.width + this.MARGIN.left + this.MARGIN.right
-				} ${
-					this.DIMENSIONS.height + this.MARGIN.top + this.MARGIN.bottom
-				}`,
-			)
-			.style('display', 'inline-block')
-			.style('position', 'absolute')
-			.style('top', '0')
-			.style('left', '0')
-			.append("g")
-			.attr(
-				"transform",
-				`translate(${this.MARGIN.left}, ${this.MARGIN.top})`,
-			);
 
 		// Arrow Definitions
 		this.indexed = this.OBJ.indexed === false ? this.OBJ.indexed : true;
@@ -77,13 +20,13 @@ export class Sequence extends D3Base {
 		this.scaleY = d3
 			.scaleBand()
 			.domain(this.DATA)
-			.range([0, this.DIMENSIONS.height])
+			.range([0, this.svg().height])
 			.paddingInner(0);
 
 		this.scaleX = d3
 			.scaleBand()
 			.domain(this.DATA)
-			.range([0, this.DIMENSIONS.width])
+			.range([0, this.svg().width])
 			.paddingInner(0.7);
 
 		this.COLORS = {
@@ -127,7 +70,7 @@ export class Sequence extends D3Base {
 			const sequenceName = this.SVG.select("g")
 				.append("text")
 				.attr("text-anchor", "middle")
-				.attr("x", this.DIMENSIONS.width / 2)
+				.attr("x", this.svg().width / 2)
 				.attr("y", -this.scaleY.bandwidth() / 1.5)
 				.attr("dy", 5)
 				.text(this.SEQUENCE_NAME)
@@ -152,7 +95,7 @@ export class Sequence extends D3Base {
 				.attr("dy", "0.5em")
 				.text((d, i) => i)
 				.style("font-family", "system-ui")
-				.style("font-size", "0.75rem")
+				.style("font-size", "0.8rem")
 				.attr("fill", (d) => (d.text ? d.text : this.COLORS.textColor));
 		}
 
@@ -200,10 +143,10 @@ export class Sequence extends D3Base {
 			.attr("text-anchor", "middle")
 			.attr("x", this.scaleY.bandwidth() / 2)
 			.attr("y", this.scaleY.bandwidth() / 2)
-			.attr("dy", 5)
+			.attr("dy", "0.4em")
 			.text((d) => `${d.val}`)
 			.style("font-family", "system-ui")
-			.style("font-size", `0.8rem`)
+			.style("font-size", `0.85rem`)
 			.attr("fill", (d) => {
 				if (d.colors && d.colors?.text) {
 					return d.colors.text;

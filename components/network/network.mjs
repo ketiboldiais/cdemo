@@ -3,62 +3,14 @@ import D3Base from "../../core/d3_base/D3Base.mjs";
 export class Network extends D3Base {
 	constructor(obj) {
 		super(obj);
+		this.margins = () => this.setMargin(10, 10, 10, 10);
+		this.svg = () => this.setSVGDimensions(300, 250);
+		this.SVG_CONTAINER = this.generateSVGContainer(60, 60);
+		this.SVG = this.generateSVG();
+		
 		this.containerWidthDefault = "60%";
 
 		this.containerHeightDefault = "50%";
-
-		this.D3_CONTAINER_WIDTH = this.OBJ.width
-			? `${this.OBJ.width}%`
-			: this.containerWidthDefault;
-
-		this.D3_CONTAINER_HEIGHT = this.OBJ.height
-			? `${this.OBJ.height}%`
-			: this.containerHeightDefault;
-
-		// Set the SVG's width
-		this.SVG_WIDTH = this.OBJ.svg_width ? this.OBJ.svg_width : 300;
-
-		// Set the SVG's height
-		this.SVG_HEIGHT = this.OBJ.svg_height ? this.OBJ.svg_height : 250;
-
-		this.MARGIN = {
-			top: 10,
-			right: 10,
-			bottom: 10,
-			left: 10,
-		};
-		this.DIMENSIONS = {
-			width: this.SVG_WIDTH - this.MARGIN.left - this.MARGIN.right,
-			height: this.SVG_HEIGHT - this.MARGIN.top - this.MARGIN.bottom,
-		};
-
-		// The SVG container is <div> that wraps the SVG. This allows for resizing.
-		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "block")
-			.style("position", "relative")
-			.style("width", this.D3_CONTAINER_WIDTH)
-			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
-			.style("overflow", "hidden");
-
-		this.SVG = this.SVG_CONTAINER.append("svg")
-			.attr("preserveAspectRatio", "xMinYMin meet")
-			.attr(
-				"viewBox",
-				`0 0 ${
-					this.DIMENSIONS.width + this.MARGIN.left + this.MARGIN.right
-				} ${
-					this.DIMENSIONS.height + this.MARGIN.top + this.MARGIN.bottom
-				}`,
-			)
-			.style('display', 'inline-block')
-			.style('position', 'absolute')
-			.style('top', '0')
-			.style('left', '0')
-			.append("g")
-			.attr(
-				"transform",
-				`translate(${this.MARGIN.left}, ${this.MARGIN.top})`,
-			);
 
 		this.EDGES = this.OBJ.data;
 
@@ -84,8 +36,8 @@ export class Network extends D3Base {
 		this.isDirected = this.OBJ.directed ? this.OBJ.directed : false;
 
 		this.NODES = Object.values(this.generateNode());
-		this.COLLISION_RADIUS = this.OBJ.collide ? this.OBJ.collide : 30;
-		this.FORCE_STRENGTH = this.OBJ.strength ? this.OBJ.strength : 1;
+		this.COLLISION_RADIUS = this.OBJ.collide ? this.OBJ.collide : 20;
+		this.FORCE_STRENGTH = this.OBJ.strength ? this.OBJ.strength : -1;
 		this.FORCE_DISTANCE = this.OBJ.distance ? this.OBJ.distance : 1;
 		this.NODE_COUNT = this.NODES.length;
 
@@ -96,7 +48,7 @@ export class Network extends D3Base {
 			radialNodeOutlineColor: "#54BAB9",
 			edgeLabelColor: "#5EAAA8",
 			linkColor: this.OBJ.linkColor ? this.OBJ.linkColor : "#ECA6A6",
-			textColor: "black",
+			textColor: "currentColor",
 		};
 
 		if (this.isDirected) {
@@ -134,8 +86,8 @@ export class Network extends D3Base {
 				"center",
 				d3
 					.forceCenter()
-					.x(this.DIMENSIONS.width / 2)
-					.y(this.DIMENSIONS.height / 2),
+					.x(this.svg().width / 2)
+					.y(this.svg().height / 2),
 			)
 			.force("collision", d3.forceCollide().radius(this.COLLISION_RADIUS));
 	}

@@ -5,12 +5,17 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "d3": "^7.4.4"
-  }
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/numerstack/cdemo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/numerstack/cdemo/issues"
+  },
+  "homepage": "https://github.com/numerstack/cdemo#readme"
 }

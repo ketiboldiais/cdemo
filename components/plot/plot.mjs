@@ -1,58 +1,14 @@
 import D3Base from "../../core/d3_base/D3Base.mjs";
 
 export class Plot extends D3Base {
+	margins = () => this.setMargin(10, 10, 10, 10);
+	svg = () => this.setSVGDimensions(300, 300);
+
 	constructor(obj) {
 		super(obj);
-		this.containerWidthDefault = "60%";
+		this.SVG_CONTAINER = this.generateSVGContainer(60, 60);
+		this.SVG = this.generateSVG();
 
-		this.containerHeightDefault = "0%";
-
-		this.D3_CONTAINER_WIDTH = this.OBJ.width
-			? `${this.OBJ.width}%`
-			: this.containerWidthDefault;
-
-		this.D3_CONTAINER_HEIGHT = this.OBJ.height
-			? `${this.OBJ.height}%`
-			: this.containerHeightDefault;
-
-		// Set the SVG's width
-		this.SVG_WIDTH = this.OBJ.svg_width ? this.OBJ.svg_width : 300;
-
-		// Set the SVG's height
-		this.SVG_HEIGHT = this.OBJ.svg_height ? this.OBJ.svg_height : 250;
-
-		// Set the SVG's dimensions
-		this.DIMENSIONS = {
-			width: this.SVG_WIDTH - this.MARGIN.left - this.MARGIN.right,
-			height: this.SVG_HEIGHT - this.MARGIN.top - this.MARGIN.left,
-		};
-
-		// The SVG container is <div> that wraps the SVG. This allows for resizing.
-		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "block")
-			.style("position", "relative")
-			.style("width", this.D3_CONTAINER_WIDTH)
-			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
-			.style("overflow", "hidden");
-
-		this.SVG = this.SVG_CONTAINER.append("svg")
-			.attr("preserveAspectRatio", "xMinYMin meet")
-			.attr(
-				"viewBox",
-				`0 0 ${
-					this.DIMENSIONS.width + this.MARGIN.left + this.MARGIN.right
-				} ${
-					this.DIMENSIONS.height + this.MARGIN.top + this.MARGIN.bottom
-				}`,
-			)
-			.classed("svg-content-responsive", true)
-			.append("g")
-			.attr(
-				"transform",
-				`translate(${this.MARGIN.left}, ${this.MARGIN.top})`,
-			);
-
-		// Arrow Definitions
 		this.SVG_DEFINITIONS = this.SVG.append("svg:defs")
 			.attr("id", "arrow")
 			.append("svg:marker")
@@ -66,9 +22,11 @@ export class Plot extends D3Base {
 			.attr("d", "M 0 0 L 10 5 L 0 10 z")
 			.attr("stroke", "#000")
 			.attr("stroke-width", 2);
+
 		this.USER_INPUT_PRECISION = this.OBJ.precision
 			? this.OBJ.precision
 			: 100;
+
 		this.COLORS = {
 			plotColor: "firebrick",
 			yAxisColor: "#AECBD6",
@@ -90,12 +48,7 @@ export class Plot extends D3Base {
 			rangeUpperBound: this.OBJ.range[0],
 			rangeLowerBound: this.OBJ.range[1],
 		};
-		this.MARGIN = {
-			top: 10,
-			right: 10,
-			bottom: 10,
-			left: 10,
-		};
+		
 		this.FONTS = {
 			serif: "CMU",
 			mono: "system-ui",
@@ -106,14 +59,15 @@ export class Plot extends D3Base {
 				large: "1rem",
 			},
 		};
+
 		this.SCALE = {
 			xAxis: d3.scaleLinear(
 				[this.DATA.domainLowerBound, this.DATA.domainUpperBound],
-				[this.DIMENSIONS.width, 0],
+				[this.svg().width, 0],
 			),
 			yAxis: d3.scaleLinear(
 				[this.DATA.rangeLowerBound, this.DATA.rangeUpperBound],
-				[0, this.DIMENSIONS.height],
+				[0, this.svg().height],
 			),
 			xValue: d3.scaleLinear([0, 100]),
 			yValue: d3.scaleLinear([100, 0]),
@@ -145,10 +99,10 @@ export class Plot extends D3Base {
 		this.CLIP_PATH = this.SVG.append("clipPath")
 			.attr("id", "chart-area")
 			.append("rect")
-			.attr("x", this.MARGIN.right)
-			.attr("y", this.MARGIN.top)
-			.attr("width", this.DIMENSIONS.width)
-			.attr("height", this.DIMENSIONS.height);
+			.attr("x", this.margins().right)
+			.attr("y", this.margins().top)
+			.attr("width", this.svg().width)
+			.attr("height", this.svg().height);
 	}
 
 	render() {
@@ -163,16 +117,15 @@ export class Plot extends D3Base {
 
 		// Append x-axis
 		const append_xAxis = this.SVG.append("g")
-			.attr("transform", `translate(0, ${this.DIMENSIONS.height / 2})`)
-			.style("font-size", this.FONTS.size.tiny)
-			.style("font-family", this.FONTS.serif)
+			.attr("transform", `translate(0, ${this.svg().height / 2})`)
+			.style("font-size", this.FONTS.size.medium)
 			.style("color", this.COLORS.xAxisColor)
 			.call(xAxis);
 
 		// Append y-axis
 		const append_yAxis = this.SVG.append("g")
-			.attr("transform", `translate(${this.DIMENSIONS.width / 2}, 0)`)
-			.style("font-size", this.FONTS.size.tiny)
+			.attr("transform", `translate(${this.svg().width / 2}, 0)`)
+			.style("font-size", this.FONTS.size.medium)
 			.style("color", this.COLORS.yAxisColor)
 			.call(yAxis);
 

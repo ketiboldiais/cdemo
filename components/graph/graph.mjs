@@ -3,60 +3,10 @@ import D3Base from "../../core/d3_base/D3Base.mjs";
 export class Graph extends D3Base {
 	constructor(obj) {
 		super(obj);
-		this.containerWidthDefault = "50%";
-
-		this.containerHeightDefault = "25%";
-
-		this.D3_CONTAINER_WIDTH = this.OBJ.width
-			? `${this.OBJ.width}%`
-			: this.containerWidthDefault;
-
-		this.D3_CONTAINER_HEIGHT = this.OBJ.height
-			? `${this.OBJ.height}%`
-			: this.containerHeightDefault;
-
-		this.SVG_WIDTH = this.OBJ.svg_width ? this.OBJ.svg_width : 300;
-
-		this.SVG_HEIGHT = this.OBJ.svg_height ? this.OBJ.svg_height : 150;
-
-		this.MARGIN = {
-			top: 20,
-			right: 20,
-			bottom: 20,
-			left: 20,
-		};
-
-		this.DIMENSIONS = {
-			width: this.SVG_WIDTH - this.MARGIN.left - this.MARGIN.right,
-			height: this.SVG_HEIGHT - this.MARGIN.top - this.MARGIN.bottom,
-		};
-
-		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "block")
-			.style("position", "relative")
-			.style("width", this.D3_CONTAINER_WIDTH)
-			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
-			.style("overflow", "hidden");
-
-		this.SVG = this.SVG_CONTAINER.append("svg")
-			.attr("preserveAspectRatio", "xMinYMin meet")
-			.attr(
-				"viewBox",
-				`0 0 ${
-					this.DIMENSIONS.width + this.MARGIN.left + this.MARGIN.right
-				} ${
-					this.DIMENSIONS.height + this.MARGIN.top + this.MARGIN.bottom
-				}`,
-			)
-			.style("display", "inline-block")
-			.style("position", "absolute")
-			.style("top", "0")
-			.style("left", "0")
-			.append("g")
-			.attr(
-				"transform",
-				`translate(${this.MARGIN.left}, ${this.MARGIN.top})`,
-			);
+		this.margins = () => this.setMargin(30, 30, 30, 30);
+		this.svg = () => this.setSVGDimensions(300, 300);
+		this.SVG_CONTAINER = this.generateSVGContainer(60, 60);
+		this.SVG = this.generateSVG();
 
 		this.EDGES = this.OBJ.data;
 
@@ -77,7 +27,7 @@ export class Graph extends D3Base {
 
 		this.colorPalette = this.OBJ.color
 			? this.palette(this.OBJ.color)
-			: this.palette("yellowScheme");
+			: this.palette("plainScheme");
 
 		this.COLORS = {
 			linkColor: this.colorPalette.stroke,
@@ -91,7 +41,7 @@ export class Graph extends D3Base {
 			fontSize: 0.65,
 		};
 
-		this.COLLISION_RADIUS = this.OBJ.collide ? this.OBJ.collide : 50;
+		this.COLLISION_RADIUS = this.OBJ.collide ? this.OBJ.collide : 40;
 		this.FORCE_STRENGTH = this.OBJ.strength ? this.OBJ.strength : -10;
 		this.FORCE_DISTANCE = this.OBJ.distance ? this.OBJ.distance : 50;
 
@@ -125,8 +75,8 @@ export class Graph extends D3Base {
 				"center",
 				d3
 					.forceCenter()
-					.x(this.DIMENSIONS.width / 2)
-					.y(this.DIMENSIONS.height / 2),
+					.x(this.svg().width / 2)
+					.y(this.svg().height / 2),
 			);
 	}
 	render() {

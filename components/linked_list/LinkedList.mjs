@@ -3,93 +3,29 @@ import D3Base from "../../core/d3_base/D3Base.mjs";
 export class LinkedList extends D3Base {
 	constructor(obj) {
 		super(obj);
-		this.containerWidthDefault = "80%";
+		this.margins = () => this.setMargin(10, 30, 10, 30);
+		this.svg = () => this.setSVGDimensions(300, 200);
+		this.SVG_CONTAINER = this.generateSVGContainer(70, 10);
+		this.SVG = this.generateSVG();
 
-		this.containerHeightDefault = "0%";
 
-		this.D3_CONTAINER_WIDTH = this.OBJ.width
-			? `${this.OBJ.width}%`
-			: this.containerWidthDefault;
-
-		this.D3_CONTAINER_HEIGHT = this.OBJ.height
-			? `${this.OBJ.height}%`
-			: this.containerHeightDefault;
-
-		// Set the SVG's width
-		this.SVG_WIDTH = this.OBJ.svg_width ? this.OBJ.svg_width : 300;
-
-		// Set the SVG's height
-		this.SVG_HEIGHT = this.OBJ.svg_height ? this.OBJ.svg_height : 30;
-
-		// Set the SVG's dimensions
-		this.DIMENSIONS = {
-			width: this.SVG_WIDTH - this.MARGIN.left - this.MARGIN.right,
-			height: this.SVG_HEIGHT - this.MARGIN.top - this.MARGIN.left,
-		};
-
-		// The SVG container is <div> that wraps the SVG. This allows for resizing.
-		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "block")
-			.style("position", "relative")
-			.style("width", this.D3_CONTAINER_WIDTH)
-			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
-			.style("overflow", "hidden");
-
-		this.SVG = this.SVG_CONTAINER.append("svg")
-			.attr("preserveAspectRatio", "xMinYMin meet")
-			.attr(
-				"viewBox",
-				`0 0 ${
-					this.DIMENSIONS.width + this.MARGIN.left + this.MARGIN.right
-				} ${
-					this.DIMENSIONS.height + this.MARGIN.top + this.MARGIN.bottom
-				}`,
-			)
-			.classed("svg-content-responsive", true)
-			.append("g")
-			.attr(
-				"transform",
-				`translate(${this.MARGIN.left}, ${this.MARGIN.top})`,
-			);
-
-		// Arrow Definitions
-		this.SVG_DEFINITIONS = this.SVG.append("svg:defs")
-			.attr("id", "arrow")
-			.append("svg:marker")
-			.attr("viewBox", "0 0 10 10")
-			.attr("refX", 5)
-			.attr("refY", 5)
-			.attr("markerWidth", 6)
-			.attr("markerHeight", 6)
-			.attr("orient", "auto")
-			.append("svg:path")
-			.attr("d", "M 0 0 L 10 5 L 0 10 z")
-			.attr("stroke", "#000")
-			.attr("stroke-width", 2);
 		this.NODES = this.OBJ.data;
+
 		this.isIndexed = this.OBJ.indexed ? this.OBJ.indexed : false;
+
 		this.NODE_COUNT = this.OBJ.data.length;
-		this.MARGIN = {
-			top: 10,
-			right: 30,
-			bottom: 10,
-			left: 30,
-		};
-		this.DIMENSIONS = {
-			width: this.SVG_WIDTH - this.MARGIN.left - this.MARGIN.right,
-			height: this.SVG_HEIGHT - this.MARGIN.top - this.MARGIN.bottom,
-		};
 
 		this.SCALE = d3
 			.scaleBand()
 			.domain(d3.range(this.NODE_COUNT))
-			.rangeRound([0, this.DIMENSIONS.width])
+			.rangeRound([0, this.svg().width])
 			.paddingInner(0.5);
 
 		this.NODE = {
 			width: this.SCALE.bandwidth(),
 			height: 10,
 		};
+
 		this.COLORS = {
 			arrowColor: "#FF7878",
 			dataFieldColor: "#FFF",

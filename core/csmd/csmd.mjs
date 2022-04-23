@@ -1,4 +1,3 @@
-
 export default class CSMD {
 	constructor(obj) {
 		this.OBJ = obj;

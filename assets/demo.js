@@ -18,7 +18,7 @@ cdemo.plot({
 	domain: [-10, 10],
 	range: [-4, 4],
 	precision: 100,
-})
+});
 
 cdemo.truthTable({
 	id: "flipFlopGate",
@@ -26,9 +26,7 @@ cdemo.truthTable({
 		[7, 5],
 		[7, 6],
 	],
-	headers: [
-		"clock", "set", "reset", "set*", "reset*", "Q", "Q",
-	],
+	headers: ["clock", "set", "reset", "set*", "reset*", "Q", "Q"],
 	rows: [
 		[0, 0, 0, 1, 1, "NC", "NC"],
 		[0, 0, 1, 1, 1, "NC", "NC"],
@@ -44,11 +42,27 @@ cdemo.truthTable({
 cdemo.matrix({
 	id: "matrix",
 	focus: [
-		[0, 0], [0, 3], [0, 6], [0, 7], [0, 8],
-		[1, 0], [1, 3], [1, 7],
-		[2, 0], [2, 1], [2, 2], [2, 3], [2, 7],
-		[3, 0], [3, 3], [3, 7],
-		[4, 0], [4, 3], [4, 6], [4, 7], [4, 8],
+		[0, 0],
+		[0, 3],
+		[0, 6],
+		[0, 7],
+		[0, 8],
+		[1, 0],
+		[1, 3],
+		[1, 7],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+		[2, 3],
+		[2, 7],
+		[3, 0],
+		[3, 3],
+		[3, 7],
+		[4, 0],
+		[4, 3],
+		[4, 6],
+		[4, 7],
+		[4, 8],
 	],
 	indexed: true,
 	data: [
@@ -63,21 +77,20 @@ cdemo.matrix({
 cdemo.array({
 	id: "array",
 	data: [
-		{ val: 2 }, { val: 4 }, { val: 1 },
-		{ val: 3 }, { val: 8 }, { val: 0 },
-		{ val: 9 }, { val: 7 }, { val: 5 },
+		{ val: 2 },
+		{ val: 4 },
+		{ val: 1 },
+		{ val: 3 },
+		{ val: 8 },
+		{ val: 0 },
+		{ val: 9 },
+		{ val: 7 },
+		{ val: 5 },
 	],
 });
 
 cdemo.network({
 	id: "network",
-	height: 48,
-	width: 95,
-	collide: 22,
-	distance: 9,
-	strength: -30,
-	svg_width: 530,
-	svg_height: 255,
 	data: [
 		{
 			source: "Conekt",
@@ -116,9 +129,6 @@ cdemo.network({
 
 cdemo.graph({
 	id: "graph",
-	height: 50,
-	strength: -40,
-	svg_height: 315,
 	color: "yellowScheme",
 	data: [
 		{ source: "house1", target: "house2" },
@@ -139,4 +149,26 @@ cdemo.graph({
 		{ source: "house7", target: "house3" },
 		{ source: "house3", target: "house7" },
 	],
+});
+
+cdemo.tree({
+	id: "binaryTree",
+	narrow: 50,
+	edgeLength: 110,
+	data: [
+		{ child: "a", parent: "" },
+		{ child: "b", parent: "a" },
+		{ child: "c", parent: "a" },
+		{ child: "d", parent: "b" },
+		{ child: "e", parent: "b" },
+		{ child: "h", parent: "d" },
+		{ child: "i", parent: "d" },
+		{ child: "j", parent: "i" },
+		{ child: "k", parent: "i" },
+	],
+});
+
+cdemo.plot3d({
+	id: "plot3D",
+	fn: (x, y) => (x**2 - y**2) * 0.2
 });
