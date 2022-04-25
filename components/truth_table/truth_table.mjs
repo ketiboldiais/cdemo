@@ -9,8 +9,40 @@ export class TruthTable extends CSMD {
 		this.TABLE_styles = {
 			margin: "auto",
 			fontFamily: "system-ui",
-			fontSize: "0.7rem",
+			fontSize: "1em",
 			border: "none",
+		};
+
+		this.COLORS = {
+			black: "#333",
+			lightBlack: "#444444",
+			white: "#FFF",
+			beige: "#F9F3DF",
+			lightBrown: "#CDB699",
+			lightGreen: "#D5EEBB",
+			darkGreen: "#529F00",
+			forestGreen: "#238823",
+			paleGreen: "#B4CFB0",
+			paleYellowGreen: "#D3ECA7",
+			blue: "#0077B6",
+			darkBlue: "#006a97dc",
+			purple: "#8946A6",
+			tomato: "#FF6347",
+			salmon: "#E83A14",
+			pink: "#FE83C6",
+			lavender: "#EA99D5",
+			darkRed: "#A00000",
+			orange: "#F0A500",
+			teal: "#008080",
+			lightGrey: "#CDCDCD",
+			gold: "goldenrod",
+			fireBrick: "firebrick",
+			greyBlue: "#AECBD6",
+		};
+
+		this.fonts = {
+			Mono: "system-ui",
+			Serif: "CMU",
 		};
 
 		this.THEAD_styles = {

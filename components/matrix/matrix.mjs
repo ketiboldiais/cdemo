@@ -1,120 +1,118 @@
-import CSMD from "../../core/csmd/csmd.mjs";
+import D3Base from "../../core/d3_base/D3Base.mjs";
+import setValue from "../../core/utils/setValue.mjs";
 
-export class Matrix extends CSMD {
+export class Matrix extends D3Base {
 	constructor(obj) {
 		super(obj);
+		this.margins = () => this.setMargin(20, 20, 20, 20);
+		this.svg = () => this.setSVGDimensions(300, 300);
+		this.SVG_CONTAINER = this.generateSVGContainer(60, 60);
+		this.SVG = this.generateSVG();
+		this.focusData = obj.focus;
+		this.data = this.generateData(obj.data);
+		this.rows = d3.map(this.data, (d) => {
+			return d.row;
+		});
+		this.columns = d3.map(this.data, (d) => {
+			return d.col;
+		});
 
-		this.TABLE_styles = {
-			margin: "0 auto",
-			fontFamily: "system-ui",
-			fontSize: "0.7rem",
-			padding: "0.2em",
-			border: "none",
-			borderRadius: "5px",
-			borderCollapse: "separate",
-			borderSpacing: "3px",
-		};
+		this.xScale = d3
+			.scaleBand()
+			.domain(this.columns)
+			.range([0, this.svg().width])
+			.padding(0.08);
 
-		// Style for the offsetting TH element
-		this.OFFSET_TH_style = {
-			border: "none",
-		};
+		this.yScale = d3
+			.scaleBand()
+			.domain(this.rows)
+			.range([0, this.svg().height])
+			.padding(0.08);
 
-		this.TH_styles = {
-			padding: "0",
-			margin: "0",
-			border: "none",
-			fontWeight: "normal",
-			color: `rgb(152, 212, 230)`,
-			textAlign: "center",
-		};
+		this.xAxis = this.SVG.append("g")
+			.style("font-size", 10)
+			.style("font-family", "system-ui")
+			.attr("transform", `translate(0, ${-this.xScale.bandwidth() / 8})`)
+			.call(d3.axisBottom(this.xScale).tickSize(0));
 
-		this.TD_styles = {
-			padding: "0.1em 0.4em",
-			backgroundColor: this.COLORS.white,
-			color: this.COLORS.black,
-			border: `solid thin lightgrey`,
-			boxShadow: "0 3px 2px 0px grey, 0 2px 1px 0 rgba(0,0,0,0.2)",
-			textAlign: "center",
-		};
+		this.xAxis.selectAll(".domain").remove();
 
-		this.TD_focus_style = {
-			backgroundColor: this.OBJ.focusBGColor
-				? this.OBJ.focusBGColor
-				: `rgb(48, 48, 48)`,
-			color: this.OBJ.focusTextColor
-				? this.OBJ.focusTextColor
-				: this.COLORS.orange,
-			border: `solid thin ${
-				this.OBJ.focusBorderColor
-					? this.OBJ.focusBorderColor
-					: "rgb(51, 51, 51)"
-			}`,
-			boxShadow: `0 3px 2px 0px ${
-				this.OBJ.focusBorderColor ? this.OBJ.focusBorderColor : "black"
-			}, 0 2px 1px 0 rgba(0,0,0,0.2)`,
-		};
+		this.yAxis = this.SVG.append("g")
+			.style("font-size", 10)
+			.style("font-family", "system-ui")
+			.attr("transform", `translate(0, ${this.yScale.bandwidth() / 2})`)
+			.call(d3.axisLeft(this.yScale).tickSize(0))
+			.select(".domain")
+			.remove();
 	}
-	render(obj) {
-		const TABLE = this.TABLE();
-		Object.assign(TABLE.style, this.TABLE_styles);
-		this.CONTAINER.appendChild(TABLE);
 
-		const THEAD = this.THEAD();
-		TABLE.appendChild(THEAD);
+	setTextColor(_default, d) {
+		let fill = "orange";
+		if (d.focus !== undefined) {
+			return fill;
+		} else {
+			return _default;
+		}
+	}
 
-		const TBODY = this.TBODY();
-		TABLE.appendChild(TBODY);
+	setFill(_default, d) {
+		let fill = "black";
+		if (d.focus !== undefined) {
+			return fill;
+		} else {
+			return _default;
+		}
+	}
 
-		const ROW_COUNT = this.OBJ.data.length;
-
-		for (let i = 0; i < ROW_COUNT; i++) {
-			const TR = this.TR();
-			TBODY.appendChild(TR);
-
-			for (let j = 0; j < this.OBJ.data[i].length; j++) {
-				const TD = this.TD();
-				Object.assign(TD.style, this.TD_styles);
-				TR.appendChild(TD);
-				TD.innerText = this.OBJ.data[i][j];
-
-				// If 'focus' attribute has a value, modify background color
-
-				if (this.OBJ.focus) {
-					for (let k = 0; k < this.OBJ.focus.length; k++) {
-						if (i == this.OBJ.focus[k][0] && j == this.OBJ.focus[k][1]) {
-							Object.assign(TD.style, this.TD_focus_style);
+	generateData(userData) {
+		let data = [];
+		for (let row = 0; row < userData.length; row++) {
+			for (let col = 0; col < userData[row].length; col++) {
+				let element = { val: userData[row][col], row: row, col: col };
+				if (this.focusData) {
+					for (let i = 0; i < this.focusData.length; i++) {
+						if (
+							this.focusData[i][0] === row &&
+							this.focusData[i][1] === col
+						) {
+							element.focus = true;
 						}
 					}
 				}
-
-				// If matrix attribute 'indexed' is true, add row index elements
-				// If matrix attribute 'rowIndexed' is true, add row index elements
-				if ((this.OBJ.indexed && j == 0) || this.OBJ.rowIndexed) {
-					const INDEX_TD = this.TD();
-					Object.assign(INDEX_TD.style, this.TH_styles);
-					INDEX_TD.style.padding = "0 0.2em";
-					INDEX_TD.innerText = i;
-					TR.prepend(INDEX_TD);
-				}
+				data.push(element);
 			}
 		}
+		return data;
+	}
 
-		// If matrix attribute 'indexed' is true, add column index elements
-		// If matrix attribute 'rowIndexed' is true, add column index elements
-		if (this.OBJ.indexed || this.OBJ.columnIndexed) {
-			// Prepend an offsetting TH element to align the indices
-			const OFFSET_TH = document.createElement("th");
-			Object.assign(OFFSET_TH.style, this.OFFSET_TH_style);
-			THEAD.append(OFFSET_TH);
+	render() {
+		const g = this.SVG.selectAll("squares")
+			.data(this.data)
+			.enter()
+			.append("g")
+			.attr(
+				"transform",
+				(d) => `translate(${this.xScale(d.col)}, ${this.yScale(d.row)})`,
+			);
 
-			// Append the indices
-			for (let i = 0; i < this.OBJ.data[0].length; i++) {
-				const TH = document.createElement("th");
-				Object.assign(TH.style, this.TH_styles);
-				TH.innerText = i;
-				THEAD.append(TH);
-			}
-		}
+		const square = g
+			.append("rect")
+			.attr("x", 0)
+			.attr("y", this.xScale.bandwidth() / 2)
+			.attr("width", this.xScale.bandwidth())
+			.attr("height", this.yScale.bandwidth())
+			.attr("fill", (d) => this.setFill("white", d))
+			.attr("stroke", "black")
+			.style("stroke-width", "1px")
+			.style("opacity", 0.8);
+
+		const labels = g
+			.append("text")
+			.attr("x", this.xScale.bandwidth() / 2)
+			.attr("y", this.yScale.bandwidth())
+			.attr("dy", "0.2em")
+			.attr("text-anchor", "middle")
+			.attr("fill", (d) => this.setTextColor("black", d))
+			.text((d) => d.val);
 	}
 }

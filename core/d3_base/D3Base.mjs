@@ -1,34 +1,47 @@
 import CSMD from "../csmd/csmd.mjs";
+import { isNotNull } from "../utils/isNotNull.mjs";
+import { isNotUndefined } from "../utils/isNotUndefined.mjs";
 import setValue from "../utils/setValue.mjs";
 
 export default class D3Base extends CSMD {
 	constructor(obj) {
 		super(obj);
-		this.margins = () => this.setMargin(10, 10, 10, 10);
-		this.svg = () => this.setSVGDimensions(200, 200);
 
-		this.D3_CONTAINER = this.BODY.selectAll(`#${this.OBJ.id}`);
-		this.D3_CONTAINER.style("display", "flex").style(
-			"justify-content",
-			"center",
+		this.OBJ = obj;
+
+		this.data = obj.data;
+
+		this.mainFontSize = setValue(this.OBJ.mainFontSize, "0.8rem");
+
+		this.secondaryFontSize = setValue(
+			this.OBJ.secondaryFontSize,
+			"0.7rem",
 		);
 
-		this.DIMENSIONS = this.setSVGDimensions();
+		this.defaultPalette = "plainScheme";
 
-		this.SVG_CONTAINER = this.generateSVGContainer(50, 25);
+		this.D3_CONTAINER = this.BODY.selectAll(`#${this.OBJ.id}`);
+
+		this.D3_CONTAINER.style(
+			"display",
+			setValue(this.OBJ.display, "flex"),
+		).style(
+			"justify-content",
+			setValue(this.OBJ.justifyContent, "center"),
+		);
 
 		this.styles = {
 			font: this.OBJ.styles ? this.OBJ.styles?.font : "system-ui",
 			fontSize: this.OBJ.styles ? this.OBJ.styles?.fontSize : "0.7rem",
 		};
+	}
 
-		this.userMargin = this.OBJ.margin ? this.OBJ.margin : false;
-
-		this.colorSchemes = {
+	colorSchemes = () => {
+		return {
 			plainScheme: {
-				fill: "currentColor",
-				stroke: "currentColor",
-				text: "currentColor",
+				fill: "white",
+				stroke: "black",
+				text: "black",
 			},
 			blueScheme: {
 				fill: "#ebffff",
@@ -53,7 +66,12 @@ export default class D3Base extends CSMD {
 			yellowScheme: {
 				fill: "#FFFDDE",
 				stroke: "#EEBB4D",
-				text: "#5E454B",
+				text: "#BE8C63",
+			},
+			orangeBlackScheme: {
+				fill: "#393E46",
+				stroke: "#FA7D09",
+				text: "#FFD700",
 			},
 			darkRedScheme: {
 				fill: "orangered",
@@ -61,44 +79,80 @@ export default class D3Base extends CSMD {
 				text: "white",
 			},
 		};
-		this.palette = (color) => {
-			let palette;
-			switch (color) {
-				case "blueScheme":
-					palette = this.colorSchemes.blueScheme;
-					break;
-				case "greenScheme":
-					palette = this.colorSchemes.greenScheme;
-					break;
-				case "darkRedScheme":
-					palette = this.colorSchemes.darkRedScheme;
-					break;
-				case "yellowScheme":
-					palette = this.colorSchemes.yellowScheme;
-					break;
-				case "plainScheme":
-					palette = this.colorSchemes.plainScheme;
-					break;
-				case "greyScheme":
-					palette = this.colorSchemes.greyScheme;
-					break;
-				default:
-					palette = {
-						fill: color.fill,
-						stroke: color.stroke,
-						text: color.text,
-					};
-			}
-			return palette;
+	};
+
+	palette = (color) => {
+		let palette;
+		if (color === undefined || color === null) {
+			return (palette = undefined);
+		}
+		switch (color) {
+			case "blueScheme":
+				palette = this.colorSchemes().blueScheme;
+				break;
+			case "greenScheme":
+				palette = this.colorSchemes().greenScheme;
+				break;
+			case "darkRedScheme":
+				palette = this.colorSchemes().darkRedScheme;
+				break;
+			case "yellowScheme":
+				palette = this.colorSchemes().yellowScheme;
+				break;
+			case "plainScheme":
+				palette = this.colorSchemes().plainScheme;
+				break;
+			case "greyScheme":
+				palette = this.colorSchemes().greyScheme;
+				break;
+			case "orangeBlackScheme":
+				palette = this.colorSchemes().orangeBlackScheme;
+				break;
+			default:
+				palette = {
+					fill: color.fill,
+					stroke: color.stroke,
+					text: color.text,
+				};
+		}
+		return palette;
+	};
+
+	colors() {
+		const palette = setValue(
+			this.palette(this.OBJ.palette),
+			this.palette(this.defaultPalette),
+		);
+		return {
+			fillColor: palette.fill,
+			strokeColor: palette.stroke,
+			textColor: palette.text,
 		};
 	}
 
+	generateDataFromArray(arr) {
+		let data = [];
+		for (let i = 0; i < arr.length; i++) {
+			if (typeof arr[i] === "object") {
+				data.push(arr[i]);
+			} else {
+				let obj = { val: arr[i] };
+				data.push(obj);
+			}
+		}
+		return data;
+	}
+
 	setMargin(top, left, bottom, right) {
+		const userMarginTop = this.OBJ.margins ? this.OBJ.margins[0] : null;
+		const userMarginLeft = this.OBJ.margins ? this.OBJ.margins[1] : null;
+		const userMarginBottom = this.OBJ.margins ? this.OBJ.margins[2] : null;
+		const userMarginRight = this.OBJ.margins ? this.OBJ.margins[3] : null;
 		const margins = {
-			top: top,
-			left: left,
-			bottom: bottom,
-			right: right,
+			top: setValue(userMarginTop, top),
+			left: setValue(userMarginLeft, left),
+			bottom: setValue(userMarginBottom, bottom),
+			right: setValue(userMarginRight, right),
 		};
 		return margins;
 	}
@@ -114,7 +168,18 @@ export default class D3Base extends CSMD {
 	}
 
 	setContainerWidthDefault(defaultValue) {
-		return setValue(this.OBJ.width, `${defaultValue}%`);
+		if (isNotNull(this.OBJ.width) && isNotUndefined(this.OBJ.width)) {
+			return `${this.OBJ.width}%`;
+		} else {
+			return `${defaultValue}%`;
+		}
+	}
+	setContainerWidthDefault(defaultValue) {
+		if (isNotNull(this.OBJ.height) && isNotUndefined(this.OBJ.height)) {
+			return `${this.OBJ.height}%`;
+		} else {
+			return `${defaultValue}%`;
+		}
 	}
 
 	setContainerHeightDefault(defaultValue) {
@@ -124,7 +189,8 @@ export default class D3Base extends CSMD {
 	generateSVGContainer(a, b) {
 		const containerWidth = this.setContainerWidthDefault(a);
 		const containerHeight = this.setContainerHeightDefault(b);
-		const svgContainer = this.D3_CONTAINER.style("display", "inline-block")
+		const svgContainer = this.D3_CONTAINER.append("div")
+			.style("display", "inline-block")
 			.style("position", "relative")
 			.style("width", containerWidth)
 			.style("padding-bottom", containerHeight)
@@ -153,5 +219,25 @@ export default class D3Base extends CSMD {
 				`translate(${this.margins().left}, ${this.margins().top})`,
 			);
 		return SVG;
+	}
+
+	insertArrowDefinitions(obj) {
+		const { id, refX, refY, markerWidth, markerHeight, orient, fill } =
+			obj;
+		this.SVG.append("svg:defs")
+			.selectAll("marker")
+			.data(["end"])
+			.enter()
+			.append("svg:marker")
+			.attr("id", id)
+			.attr("viewBox", "0 -5 10 10")
+			.attr("refX", refX)
+			.attr("refY", refY)
+			.attr("markerWidth", markerWidth)
+			.attr("markerHeight", markerHeight)
+			.attr("orient", orient)
+			.attr("fill", fill)
+			.append("svg:path")
+			.attr("d", "M0,-5L10,0L0,5");
 	}
 }

@@ -1,7 +1,7 @@
 import D3Base from "../../core/d3_base/D3Base.mjs";
 import setValue from "../../core/utils/setValue.mjs";
 
-export class Tree extends D3Base {
+export class BinaryTree extends D3Base {
 	constructor(obj) {
 		super(obj);
 		this.narrow = setValue(this.OBJ.narrow, 0);

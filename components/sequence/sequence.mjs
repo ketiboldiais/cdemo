@@ -15,7 +15,7 @@ export class Sequence extends D3Base {
 		// Arrow Definitions
 		this.indexed = this.OBJ.indexed === false ? this.OBJ.indexed : true;
 
-		this.DATA = this.OBJ.data;
+		this.DATA = this.generateDataFromArray(this.OBJ.data);
 
 		this.scaleY = d3
 			.scaleBand()
@@ -154,5 +154,6 @@ export class Sequence extends D3Base {
 					return this.COLORS.textColor;
 				}
 			});
+		return this;
 	}
 }

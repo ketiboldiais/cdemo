@@ -116,27 +116,7 @@ export class HeatMap extends D3Base {
 			.remove();
 
 		this.COLOR = d3
-			// .interpolateWarm()
 			.quantize(d3.interpolateHcl("#C2F784", "#FD5D5D"), 8);
-		// .scaleSequential()
-		// .interpolator(d3.interpolatePlasma)
-		// .domain([1, 14]);
-
-		// this.MOUSEOVER = (d) => {
-		// 	this.TOOLTIP.style("opacity", 1);
-		// 	d3.select(this).style("stroke", "black").style("opacity", 1);
-		// };
-
-		// this.MOUSEMOVE = (d) => {
-		// 	this.TOOLTIP.html("test")
-		// 		.style("left", d3.mouse(this)[0] + 70 + "px")
-		// 		.style("top", d3.mouse(this)[1] + "px");
-		// };
-
-		// this.MOUSELEAVE = (d) => {
-		// 	this.TOOLTIP.style("opacity", 0);
-		// 	d3.select(this).style("stroke", "none").style("opacity", 0.8);
-		// };
 	}
 	render() {
 		const g = this.SVG.selectAll()
@@ -167,18 +147,18 @@ export class HeatMap extends D3Base {
 				}
 			});
 
-		const foreignbject = g
-			.append("foreignObject")
-			.attr("width", this.X_SCALE.bandwidth())
-			.attr("height", this.Y_SCALE.bandwidth());
+		// const foreignbject = g
+		// 	.append("foreignObject")
+		// 	.attr("width", this.X_SCALE.bandwidth())
+		// 	.attr("height", this.Y_SCALE.bandwidth());
 
-		const span = foreignbject
-			.append("xhtml:span")
-			.html((d) => this.KEYS[d.l])
-			.style("display", "flex")
-			.style("justify-content", "center")
-			.style("text-align", "center")
-			.style("font-size", "0.5rem")
-			.style("color", "black");
+		// const span = foreignbject
+		// 	.append("xhtml:span")
+		// 	.html((d) => this.KEYS[d.l])
+		// 	.style("display", "flex")
+		// 	.style("justify-content", "center")
+		// 	.style("text-align", "center")
+		// 	.style("font-size", "0.5rem")
+		// 	.style("color", "black");
 	}
 }

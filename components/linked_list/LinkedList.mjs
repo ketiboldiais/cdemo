@@ -4,12 +4,11 @@ export class LinkedList extends D3Base {
 	constructor(obj) {
 		super(obj);
 		this.margins = () => this.setMargin(10, 30, 10, 30);
-		this.svg = () => this.setSVGDimensions(300, 200);
-		this.SVG_CONTAINER = this.generateSVGContainer(70, 10);
+		this.svg = () => this.setSVGDimensions(250, 200);
+		this.SVG_CONTAINER = this.generateSVGContainer(80, 10);
 		this.SVG = this.generateSVG();
 
-
-		this.NODES = this.OBJ.data;
+		this.NODES = this.generateDataFromArray(this.OBJ.data);
 
 		this.isIndexed = this.OBJ.indexed ? this.OBJ.indexed : false;
 
@@ -25,16 +24,20 @@ export class LinkedList extends D3Base {
 			width: this.SCALE.bandwidth(),
 			height: 10,
 		};
-
-		this.COLORS = {
-			arrowColor: "#FF7878",
-			dataFieldColor: "#FFF",
-			dataFieldStrokeColor: "#79B4B7",
-			nextFieldColor: "#C1FFD7",
-			nextFieldStrokeColor: "#79B4B7",
-			indexColor: "#8CA1A5",
-		};
 	}
+
+	colors() {
+		return {
+			arrowColor: "#FF4C29",
+			dataFieldColor: "#FFF",
+			dataFieldStrokeColor: "#2B2B2B",
+			nextFieldColor: "#DDDDDD",
+			nextFieldStrokeColor: "#2B2B2B",
+			indexColor: "grey",
+			antColor: "#03506F",
+		}
+	}
+
 	render() {
 		const nodeGroup = this.SVG.selectAll("g")
 			.data(this.NODES)
@@ -45,37 +48,29 @@ export class LinkedList extends D3Base {
 			})
 			.attr("y", 0);
 
-		const arrows = this.SVG.append("svg:defs")
-			.selectAll("marker")
-			.data(["end"])
-			.enter()
-			.append("svg:marker")
-			.attr("id", String)
-			.attr("viewBox", "0 -5 10 10")
-			.attr("refX", 8)
-			.attr("refY", 0)
-			.attr("markerWidth", 5)
-			.attr("markerHeight", 5)
-			.attr("orient", "auto")
-			.attr("fill", this.COLORS.arrowColor)
-			.append("svg:path")
-			.attr("d", "M0,-5L10,0L0,5");
+		this.insertArrowDefinitions({
+			id: "end",
+			refX: 8,
+			refY: 0,
+			markerWidth: 5,
+			markerHeight: 5,
+			orient: "auto",
+			fill: this.colors().arrowColor,
+		});
 
-		// Data Field
-		const dataField = nodeGroup.append("g");
+		const dataField = nodeGroup
+			.append("g")
 
-		// Deleted Node
-
-		const dataFieldRectangle = dataField
+		dataField
 			.append("rect")
 			.attr("width", this.NODE.width)
-			.attr("stroke", this.COLORS.dataFieldStrokeColor)
-			.attr("fill", this.COLORS.dataFieldColor)
+			.attr("stroke", this.colors().dataFieldStrokeColor)
+			.attr("fill", this.colors().dataFieldColor)
 			.attr("height", this.NODE.height);
 
-		const dataFieldLabel = dataField
+		dataField
 			.append("text")
-			.attr("fill", this.COLORS.dataFieldStrokeColor)
+			.attr("fill", this.colors().dataFieldStrokeColor)
 			.attr("text-anchor", "middle")
 			.style("font-size", "7px")
 			.style("font-family", "")
@@ -84,12 +79,11 @@ export class LinkedList extends D3Base {
 			.attr("dy", "0.3em")
 			.text((d) => d.val);
 
-		// Indexing
 		if (this.isIndexed) {
-			const index = dataField
+			dataField
 				.append("text")
 				.attr("text-anchor", "middle")
-				.attr("fill", this.COLORS.indexColor)
+				.attr("fill", this.colors().indexColor)
 				.style("font-size", "8px")
 				.style("font-family", "CMU")
 				.attr("x", this.NODE.width / 1.5)
@@ -97,39 +91,36 @@ export class LinkedList extends D3Base {
 				.text((d, i) => i);
 		}
 
-		// Next Field
 		const nextField = nodeGroup
 			.append("g")
-			.classed("next-field", true)
 			.attr("transform", `translate(${this.SCALE.bandwidth()}, 0)`);
 
-		const nextFieldRectangle = nextField
+		nextField
 			.append("rect")
-			.attr("stroke", this.COLORS.nextFieldStrokeColor)
-			.attr("fill", this.COLORS.nextFieldColor)
+			.attr("stroke", this.colors().nextFieldStrokeColor)
+			.attr("fill", this.colors().nextFieldColor)
 			.attr("width", this.NODE.width / 2)
 			.attr("height", this.NODE.height);
 
-		// arrow
-		const link = nodeGroup
+		nodeGroup
 			.filter((d) => !d.alone)
 			.append("line")
-			.attr("stroke", this.COLORS.arrowColor)
+			.attr("stroke", this.colors().arrowColor)
 			.attr("x1", this.NODE.width + this.NODE.width / 4)
 			.attr("y1", this.NODE.height / 2)
 			.attr("x2", this.NODE.width + this.SCALE.bandwidth())
 			.attr("y2", this.NODE.height / 2)
 			.attr("marker-end", "url(#end)");
 
-		const linkStarter = nodeGroup
+		nodeGroup
 			.filter((d) => !d.alone)
 			.append("circle")
-			.attr("fill", this.COLORS.arrowColor)
+			.attr("fill", this.colors().arrowColor)
 			.attr("r", 1.5)
 			.attr("cx", this.NODE.width + this.NODE.width / 4)
 			.attr("cy", this.NODE.height / 2);
 
-		const annotation = nextField
+		nextField
 			.filter((d) => d.annotate)
 			.append("text")
 			.attr("text-anchor", "middle")

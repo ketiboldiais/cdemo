@@ -1,27 +1,14 @@
 import D3Base from "../../core/d3_base/D3Base.mjs";
+import setValue from "../../core/utils/setValue.mjs";
 
 export class Plot extends D3Base {
-	margins = () => this.setMargin(10, 10, 10, 10);
-	svg = () => this.setSVGDimensions(300, 300);
-
 	constructor(obj) {
 		super(obj);
+		this.margins = () => this.setMargin(30, 30, 30, 30);
+		this.svg = () => this.setSVGDimensions(400, 400);
 		this.SVG_CONTAINER = this.generateSVGContainer(60, 60);
 		this.SVG = this.generateSVG();
-
-		this.SVG_DEFINITIONS = this.SVG.append("svg:defs")
-			.attr("id", "arrow")
-			.append("svg:marker")
-			.attr("viewBox", "0 0 10 10")
-			.attr("refX", 5)
-			.attr("refY", 5)
-			.attr("markerWidth", 6)
-			.attr("markerHeight", 6)
-			.attr("orient", "auto")
-			.append("svg:path")
-			.attr("d", "M 0 0 L 10 5 L 0 10 z")
-			.attr("stroke", "#000")
-			.attr("stroke-width", 2);
+		this.xAxisPosition = setValue(obj.xAxisPosition, "center");
 
 		this.USER_INPUT_PRECISION = this.OBJ.precision
 			? this.OBJ.precision
@@ -48,14 +35,14 @@ export class Plot extends D3Base {
 			rangeUpperBound: this.OBJ.range[0],
 			rangeLowerBound: this.OBJ.range[1],
 		};
-		
+
 		this.FONTS = {
 			serif: "CMU",
 			mono: "system-ui",
 			size: {
 				tiny: "0.45rem",
 				small: "0.6rem",
-				medium: "0.8rem",
+				medium: "0.7rem",
 				large: "1rem",
 			},
 		};
@@ -74,20 +61,7 @@ export class Plot extends D3Base {
 		};
 
 		// Data point generator
-		this.DATAPOINTS = () => {
-			let dataset = [];
-			let x, y;
-			for (let i = 0; i <= this.DATA.domain.length - 1; i++) {
-				x = this.DATA.domain[i];
-				y = this.f(x);
-				if (isNaN(y) || !isFinite(y)) {
-					continue;
-				} else {
-					dataset.push([x, y]);
-				}
-			}
-			return dataset;
-		};
+		this.DATAPOINTS = this.generateData();
 
 		// Line generator
 		this.LINE = d3
@@ -96,13 +70,47 @@ export class Plot extends D3Base {
 			.y((d) => this.SCALE.yAxis(d[1]));
 
 		// Clip Path
-		this.CLIP_PATH = this.SVG.append("clipPath")
+		this.CLIP_PATH = this.SVG
+			.append("clipPath")
 			.attr("id", "chart-area")
 			.append("rect")
-			.attr("x", this.margins().right)
-			.attr("y", this.margins().top)
+			.attr("x", 0)
+			.attr("y", 0)
 			.attr("width", this.svg().width)
 			.attr("height", this.svg().height);
+	}
+
+	generateData() {
+		let dataset = [];
+		let x, y;
+		for (let i = 0; i <= this.DATA.domain.length-1; i++) {
+			x = this.DATA.domain[i];
+			y = this.f(x);
+			if (isNaN(y) || !isFinite(y)) {
+				continue;
+			} else {
+				dataset.push([x, y]);
+			}
+		}
+		return dataset;
+	}
+
+	xAxisShift() {
+		let position;
+		switch (this.xAxisPosition) {
+			case "center":
+				position = this.svg().height / 2;
+				break;
+			case "top":
+				position = 0;
+				break;
+			case "bottom":
+				position = this.svg().height;
+				break;
+			default:
+				position = this.svg().height / 2;
+		}
+		return position;
 	}
 
 	render() {
@@ -110,6 +118,7 @@ export class Plot extends D3Base {
 			.axisBottom(this.SCALE.xAxis)
 			.tickSizeInner(3)
 			.tickSizeOuter(0);
+
 		const yAxis = d3
 			.axisLeft(this.SCALE.yAxis)
 			.tickSizeInner(3)
@@ -117,68 +126,26 @@ export class Plot extends D3Base {
 
 		// Append x-axis
 		const append_xAxis = this.SVG.append("g")
-			.attr("transform", `translate(0, ${this.svg().height / 2})`)
+			.attr("transform", `translate(0, ${this.xAxisShift()})`)
 			.style("font-size", this.FONTS.size.medium)
 			.style("color", this.COLORS.xAxisColor)
 			.call(xAxis);
 
 		// Append y-axis
 		const append_yAxis = this.SVG.append("g")
-			.attr("transform", `translate(${this.svg().width / 2}, 0)`)
+			.attr("transform", `translate(${this.svg().width / 2}, ${0})`)
 			.style("font-size", this.FONTS.size.medium)
 			.style("color", this.COLORS.yAxisColor)
 			.call(yAxis);
 
-		// Select x-axis ticks
 		const xAxis_ticks = append_xAxis.selectAll(".tick").selectAll("line");
-
-		// Select y-axis ticks
 		const yAxis_ticks = append_yAxis.selectAll(".tick").selectAll("line");
-
-		// Last ticks selection
-		const last_xTick = append_xAxis
-			.selectAll(".tick:last-child")
-			.selectAll("line");
-		const last_xTick_text = append_xAxis
-			.selectAll(".tick:last-child")
-			.selectAll("text");
-
-		const first_xTick = append_xAxis.select(".tick").selectAll("line");
-		const first_xTick_text = append_xAxis
-			.select(".tick")
-			.selectAll("text");
-
-		const last_yTick = append_yAxis
-			.selectAll(".tick:last-child")
-			.selectAll("line");
-		const last_yTick_text = append_yAxis
-			.selectAll(".tick:last-child")
-			.selectAll("text");
-
-		const first_yTick = append_yAxis.select(".tick").selectAll("line");
-		const first_yTick_text = append_yAxis
-			.select(".tick")
-			.selectAll("text");
-
-		const ticks = [
-			first_xTick,
-			first_xTick_text,
-			last_xTick,
-			last_xTick_text,
-
-			first_yTick,
-			first_yTick_text,
-			last_yTick,
-			last_yTick_text,
-		];
-		for (let i = 0; i < ticks.length; i++) {
-			ticks[i].style("display", "none");
-		}
 		xAxis_ticks.attr("y1", -3);
 		yAxis_ticks.attr("x1", 3);
 
-		const plot = this.SVG.append("path")
-			.datum(this.DATAPOINTS())
+		// generate path
+		this.SVG.append("path")
+			.datum(this.DATAPOINTS)
 			.attr("clip-path", `url(#chart-area)`)
 			.attr("fill", "none")
 			.attr("stroke", this.COLORS.plotColor)

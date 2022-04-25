@@ -125,7 +125,6 @@ export class Plot3d extends D3Base {
 		let data = this.getTransformedData(dataVals);
 		let xlength = data.length;
 		let ylength = data[0].length;
-		console.log(data);
 		const displayWidth = 300;
 		const displayHeight = 300;
 		let d0 = [];
