@@ -1,76 +1,44 @@
+import D3Base from "../../core/d3_base/D3Base.mjs";
+import { arrayOfPropertyValues } from "../../core/utils/arrayOfPropertyValues.mjs";
+import setValue from "../../core/utils/setValue.mjs";
+import { isObjectLiteral } from "../../core/utils/isObjectLiteral.mjs";
+import { maxOfArray } from "../../core/utils/maxOfArray.mjs";
+import { minOfArray } from "../../core/utils/minOfArray.mjs";
+
 export class ScatterPlot extends D3Base {
 	constructor(obj) {
 		super(obj);
-		this.containerWidthDefault = "60%";
-		this.containerHeightDefault = "50%";
-		this.D3_CONTAINER_WIDTH = this.OBJ.width
-			? `${this.OBJ.width}%`
-			: this.containerWidthDefault;
-		this.D3_CONTAINER_HEIGHT = this.OBJ.height
-			? `${this.OBJ.height}%`
-			: this.containerHeightDefault;
-		this.SVG_WIDTH = this.OBJ.svg_width ? this.OBJ.svg_width : 350;
-		this.SVG_HEIGHT = this.OBJ.svg_height ? this.OBJ.svg_height : 250;
-		this.MARGIN = {
-			top: this.OBJ.margin ? this.OBJ.margin[0] : 20,
-			right: this.OBJ.margin ? this.OBJ.margin[1] : 20,
-			bottom: this.OBJ.margin ? this.OBJ.margin[2] : 20,
-			left: this.OBJ.margin ? this.OBJ.margin[3] : 20,
-		};
-		this.DIMENSIONS = {
-			width: this.SVG_WIDTH - this.MARGIN.left - this.MARGIN.right,
-			height: this.SVG_HEIGHT - this.MARGIN.top - this.MARGIN.left,
-		};
-		this.SVG_CONTAINER = this.D3_CONTAINER.append("div")
-			.style("display", "inline-block")
-			.style("position", "relative")
-			.style("width", this.D3_CONTAINER_WIDTH)
-			.style("padding-bottom", this.D3_CONTAINER_HEIGHT)
-			.style("overflow", "hidden");
-		this.SVG = this.SVG_CONTAINER.append("svg")
-			.attr("preserveAspectRatio", "xMinYMin meet")
-			.attr(
-				"viewBox",
-				`0 0 ${
-					this.DIMENSIONS.width + this.MARGIN.left + this.MARGIN.right
-				} ${
-					this.DIMENSIONS.height + this.MARGIN.top + this.MARGIN.bottom
-				}`,
-			)
-			.classed("svg-content-responsive", true)
-			.append("g")
-			.attr(
-				"transform",
-				`translate(${this.MARGIN.left}, ${this.MARGIN.top})`,
-			);
-		this.data = this.OBJ.data;
-		this.max_X = d3.max(this.data, (d) => {
-			return +d.x;
-		});
-		this.min_X = d3.min(this.data, (d) => {
-			return +d.x;
-		});
-		this.max_Y = d3.max(this.data, (d) => {
-			return +d.y;
-		});
-		this.min_Y = d3.min(this.data, (d) => {
-			return +d.y;
-		});
-
-		this.xMin = this.OBJ.xMin ? this.OBJ.xMin : this.min_X;
-		this.xMax = this.OBJ.xMax ? this.OBJ.xMax : this.max_X;
-		this.yMin = this.OBJ.yMin ? this.OBJ.yMin : this.min_Y;
-		this.yMax = this.OBJ.yMax ? this.OBJ.yMax : this.max_Y;
+		this.margins = () => this.setMargin(40, 40, 40, 40);
+		this.svg = () => this.setSVGDimensions(500, 400);
+		this.SVG_CONTAINER = this.generateSVGContainer(80, 65);
+		this.SVG = this.generateSVG();
+		this.data = this.generateDataFromArray();
+		this.xMin = setValue(
+			this.OBJ.xMin,
+			minOfArray(arrayOfPropertyValues(this.data, "x")),
+		);
+		this.xMax = setValue(
+			this.OBJ.xMax,
+			maxOfArray(arrayOfPropertyValues(this.data, "x")),
+		);
+		this.yMax = setValue(
+			this.OBJ.yMax,
+			maxOfArray(arrayOfPropertyValues(this.data, "y")),
+		);
+		this.yMin = setValue(
+			this.OBJ.yMin,
+			minOfArray(arrayOfPropertyValues(this.data, "y")),
+		);
 
 		this.scales = {
 			x: d3
 				.scaleLinear()
 				.domain([this.xMin, this.xMax])
-				.range([0, this.DIMENSIONS.width]),
+				.range([0, this.svg().width]),
 			y: d3
 				.scaleLinear()
 				.domain([this.yMin, this.yMax])
-				.range([this.DIMENSIONS.height, 0]),
+				.range([this.svg().height, 0]),
 			sqrt: d3
 				.scaleSqrt()
 				.domain([
@@ -110,29 +78,37 @@ export class ScatterPlot extends D3Base {
 			circleFillColor: this.colorPalette.fill,
 			circleStrokeColor: this.colorPalette.stroke,
 		};
-		this.radialMagnitude = this.OBJ.radialMagnitude
-			? this.OBJ.radialMagnitude
-			: false;
+		this.radialMagnitude = setValue(obj.radialMagnitude, false);
+	}
+	generateDataFromArray() {
+		let dataSet = [];
+		for (let i = 0; i < this.data.length; i++) {
+			if (isObjectLiteral(this.data[i])) {
+				dataSet.push(this.data[i]);
+			} else {
+				let datum = { x: this.data[i][0], y: this.data[i][1] };
+				dataSet.push(datum);
+			}
+		}
+		return dataSet;
 	}
 	render() {
-		const circles = this.SVG.selectAll("circle")
+		const circles = this.SVG.selectAll("foo")
 			.data(this.data)
 			.enter()
+			.append("g");
+		circles
 			.append("circle")
 			.attr("fill", this.colors.circleFillColor)
 			.attr("stroke", this.colors.circleStrokeColor)
 			.attr("cx", (d) => this.scales.x(d.x))
 			.attr("cy", (d) => this.scales.y(d.y))
-			.attr("r", (d) => {
-				if (this.radialMagnitude) {
-					return this.scales.sqrt(d.y);
-				} else {
-					return this.attributes.circleRadius;
-				}
-			});
+			.attr("r", (d) =>
+				this.radialMagnitude ? this.scales.sqrt(d.y) : 10,
+			);
 		const xAxis = this.SVG.append("g").attr(
 			"transform",
-			`translate(0, ${this.DIMENSIONS.height - this.axis.padding})`,
+			`translate(0, ${this.svg().height - this.axis.padding})`,
 		);
 		const xAxisRender = xAxis.call(this.axis.x);
 		const xAxisTextColor = xAxisRender
@@ -147,8 +123,9 @@ export class ScatterPlot extends D3Base {
 		const xAxislabel = xAxisRender
 			.append("text")
 			.attr("text-anchor", "start")
-			.attr("x", this.DIMENSIONS.width + 5)
+			.attr("x", this.svg().width + 5)
 			.attr("dy", "1em")
+			.attr('font-size', '0.9rem')
 			.attr("fill", this.colors.xAxisTextColor)
 			.text(this.attributes.xLabel);
 
@@ -170,6 +147,7 @@ export class ScatterPlot extends D3Base {
 			.append("text")
 			.attr("text-anchor", "end")
 			.attr("dy", "-1em")
+			.attr('font-size', '0.9rem')
 			.attr("fill", this.colors.yAxisTextColor)
 			.text(this.attributes.yLabel);
 	}

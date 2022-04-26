@@ -3,7 +3,7 @@ import D3Base from "../../core/d3_base/D3Base.mjs";
 export class LinkedList extends D3Base {
 	constructor(obj) {
 		super(obj);
-		this.margins = () => this.setMargin(10, 30, 10, 30);
+		this.margins = () => this.setMargin(10, 20, 10, 20);
 		this.svg = () => this.setSVGDimensions(250, 200);
 		this.SVG_CONTAINER = this.generateSVGContainer(80, 10);
 		this.SVG = this.generateSVG();

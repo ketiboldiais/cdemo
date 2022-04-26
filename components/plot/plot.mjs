@@ -8,6 +8,7 @@ export class Plot extends D3Base {
 		this.svg = () => this.setSVGDimensions(400, 400);
 		this.SVG_CONTAINER = this.generateSVGContainer(60, 60);
 		this.SVG = this.generateSVG();
+
 		this.xAxisPosition = setValue(obj.xAxisPosition, "center");
 
 		this.USER_INPUT_PRECISION = this.OBJ.precision

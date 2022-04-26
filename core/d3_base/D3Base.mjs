@@ -6,9 +6,7 @@ import setValue from "../utils/setValue.mjs";
 export default class D3Base extends CSMD {
 	constructor(obj) {
 		super(obj);
-
 		this.OBJ = obj;
-
 		this.data = obj.data;
 
 		this.mainFontSize = setValue(this.OBJ.mainFontSize, "0.8rem");
@@ -25,7 +23,8 @@ export default class D3Base extends CSMD {
 		this.D3_CONTAINER.style(
 			"display",
 			setValue(this.OBJ.display, "flex"),
-		).style(
+		)
+			.style(
 			"justify-content",
 			setValue(this.OBJ.justifyContent, "center"),
 		);
@@ -47,6 +46,11 @@ export default class D3Base extends CSMD {
 				fill: "#ebffff",
 				stroke: "#1572A1",
 				text: "#1572A1",
+			},
+			mintScheme: {
+				fill: "#EDFFEC",
+				stroke: "#1597BB",
+				text: "#1597BB",
 			},
 			blackScheme: {
 				fill: "#000",
@@ -90,6 +94,9 @@ export default class D3Base extends CSMD {
 			case "blueScheme":
 				palette = this.colorSchemes().blueScheme;
 				break;
+			case "mintScheme":
+					palette = this.colorSchemes().mintScheme;
+					break;
 			case "greenScheme":
 				palette = this.colorSchemes().greenScheme;
 				break;
@@ -143,7 +150,7 @@ export default class D3Base extends CSMD {
 		return data;
 	}
 
-	setMargin(top, left, bottom, right) {
+	setMargin(top, right, bottom, left) {
 		const userMarginTop = this.OBJ.margins ? this.OBJ.margins[0] : null;
 		const userMarginLeft = this.OBJ.margins ? this.OBJ.margins[1] : null;
 		const userMarginBottom = this.OBJ.margins ? this.OBJ.margins[2] : null;
@@ -158,11 +165,11 @@ export default class D3Base extends CSMD {
 	}
 
 	setSVGDimensions(svg_width, svg_height) {
-		let width = setValue(this.OBJ.svg_width, svg_width);
-		let height = setValue(this.OBJ.svg_height, svg_width);
+		let svgWidth = setValue(this.OBJ.svg_width, svg_width);
+		let svgHeight = setValue(this.OBJ.svg_height, svg_height);
 		const dimensions = {
-			width: width - this.margins().left - this.margins().right,
-			height: height - this.margins().top - this.margins().bottom,
+			width: svgWidth - this.margins().left - this.margins().right,
+			height: svgHeight - this.margins().top - this.margins().bottom,
 		};
 		return dimensions;
 	}

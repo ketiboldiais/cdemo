@@ -5,7 +5,7 @@ export class HorizontalTree extends D3Base {
 	constructor(obj) {
 		super(obj);
 		this.margins = () => this.setMargin(70, 70, 70, 70);
-		this.svg = () => this.setSVGDimensions(400, 250);
+		this.svg = () => this.setSVGDimensions(400, 400);
 		this.SVG_CONTAINER = this.generateSVGContainer(70, 70);
 		this.SVG = this.generateSVG();
 		this.mainFontSize = "0.6rem";

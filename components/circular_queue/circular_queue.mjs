@@ -5,7 +5,7 @@ export class CircularQueue extends D3Base {
 	constructor(obj) {
 		super(obj);
 
-		this.margins = () => this.setMargin(80, 55, 80, 50);
+		this.margins = () => this.setMargin(80, 55, 80, 55);
 
 		this.DATA = this.generateDataFromArray(obj.data);
 
@@ -48,11 +48,6 @@ export class CircularQueue extends D3Base {
 			outerRadius: setValue(this.OBJ.innerRadius, this.svg().width / 2),
 			innerRadius: setValue(this.OBJ.innerRadius, 50),
 		};
-	}
-
-	sliceData() {
-		const slices = this.DATA.map((element) => element.data);
-		return slices;
 	}
 
 	generateDataFromArray(arr) {

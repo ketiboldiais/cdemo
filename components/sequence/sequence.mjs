@@ -3,7 +3,7 @@ import D3Base from "../../core/d3_base/D3Base.mjs";
 export class Sequence extends D3Base {
 	constructor(obj) {
 		super(obj);
-		this.margins = () => this.setMargin(20, 5, 20, 20);
+		this.margins = () => this.setMargin(20, 20, 20, 20);
 		this.FRAME_COUNT = this.OBJ.data.length;
 		this.svg = () =>
 			this.setSVGDimensions(this.FRAME_COUNT * 30, this.FRAME_COUNT * 30);

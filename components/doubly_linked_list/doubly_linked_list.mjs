@@ -7,11 +7,11 @@ export class DoublyLinkedList extends D3Base {
 
 		this.listName = setValue(this.OBJ.name, "root")
 
-		this.margins = () => this.setMargin(20, 25, 20, 40);
+		this.margins = () => this.setMargin(20, 30, 20, 30);
 
 		this.svg = () => this.setSVGDimensions(240, 240);
 
-		this.SVG_CONTAINER = this.generateSVGContainer(80, 15);
+		this.SVG_CONTAINER = this.generateSVGContainer(80, 12);
 
 		this.SVG = this.generateSVG();
 
