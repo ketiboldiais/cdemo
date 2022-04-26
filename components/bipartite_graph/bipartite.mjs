@@ -36,7 +36,7 @@ import { translate } from "../../core/utils/translate.mjs";
 export class Bipartite extends D3Base {
 	constructor(obj) {
 		super(obj);
-		this.margins = () => this.setMargin(30, 30, 30, 30);
+		this.margins = () => this.setMargin(40, 40, 40, 40);
 		this.svg = () => this.setSVGDimensions(400, 430);
 		this.SVG_CONTAINER = this.generateSVGContainer(50, 50);
 		this.SVG = this.generateSVG();
@@ -56,7 +56,7 @@ export class Bipartite extends D3Base {
 		this.y1 = this.svg().height; // extent
 		this.dx = 5; // node width
 		// node padding
-		this.py = obj.nodePadding ? obj.nodePadding : this.nodeCount*5;
+		this.py = obj.nodePadding ? obj.nodePadding : this.nodeCount*4;
 		this.dy = this.py ? this.py : 8;
 		this.id = (d) => d.index; // default id
 		this.align = this.justify;
