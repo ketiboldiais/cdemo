@@ -16,6 +16,11 @@ import { scatterPlot } from "../cdemo/cdemo.mjs";
 import { linePlot } from "../cdemo/cdemo.mjs";
 import { bipartite } from "../cdemo/cdemo.mjs";
 
+sequence({
+	id: 'myDemo',
+	data: [1,2,3,4,5,6,7,8,9]
+})
+
 bipartite({
 	id: "bipartiteDemo",
 	data: {

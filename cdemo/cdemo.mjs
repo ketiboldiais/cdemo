@@ -1,22 +1,22 @@
-import CSMD from "../core/csmd/csmd.mjs";
-import D3Base from "../core/d3_base/D3Base.mjs";
-import { LinkedList } from "../components/linked_list/LinkedList.mjs";
-import { DoublyLinkedList } from "../components/doubly_linked_list/doubly_linked_list.mjs";
-import { Plot } from "../components/plot/plot.mjs";
-import { TruthTable } from "../components/truth_table/truth_table.mjs";
-import { Matrix } from "../components/matrix/matrix.mjs";
-import { Sequence } from "../components/sequence/sequence.mjs";
-import { Network } from "../components/network/network.mjs";
-import { Graph } from "../components/graph/graph.mjs";
-import { Tree } from "../components/tree/tree.mjs";
-import { Plot3d } from "../components/plot3d/plot3d.mjs";
-import { Stack } from "../components/stack/stack.mjs";
-import { Queue } from "../components/queue/queue.mjs";
-import { CircularQueue } from "../components/circular_queue/circular_queue.mjs";
-import { HorizontalTree } from "../components/horizontal_tree/HorizontalTree.mjs";
-import { ScatterPlot } from "../components/scatter_plot/scatter_plot.mjs";
-import { LinePlot } from "../components/line_plot/line_plot.mjs";
-import { Bipartite } from "../components/bipartite_graph/bipartite.mjs";
+import CSMD from "./core/csmd/csmd.mjs";
+import D3Base from "./core/d3_base/D3Base.mjs";
+import { LinkedList } from "./components/linked_list/LinkedList.mjs";
+import { DoublyLinkedList } from "./components/doubly_linked_list/doubly_linked_list.mjs";
+import { Plot } from "./components/plot/plot.mjs";
+import { TruthTable } from "./components/truth_table/truth_table.mjs";
+import { Matrix } from "./components/matrix/matrix.mjs";
+import { Sequence } from "./components/sequence/sequence.mjs";
+import { Network } from "./components/network/network.mjs";
+import { Graph } from "./components/graph/graph.mjs";
+import { Tree } from "./components/tree/tree.mjs";
+import { Plot3d } from "./components/plot3d/plot3d.mjs";
+import { Stack } from "./components/stack/stack.mjs";
+import { Queue } from "./components/queue/queue.mjs";
+import { CircularQueue } from "./components/circular_queue/circular_queue.mjs";
+import { HorizontalTree } from "./components/horizontal_tree/HorizontalTree.mjs";
+import { ScatterPlot } from "./components/scatter_plot/scatter_plot.mjs";
+import { LinePlot } from "./components/line_plot/line_plot.mjs";
+import { Bipartite } from "./components/bipartite_graph/bipartite.mjs";
 
 export const cdemo = {
 	stack: (obj) => stack(obj),
@@ -35,9 +35,8 @@ export const cdemo = {
 	graph: (obj) => graph(obj),
 	scatterPlot: (obj) => scatterPlot(obj),
 	linePlot: (obj) => linePlot(obj),
-	bipartite: (obj) => bipartite(obj)
+	bipartite: (obj) => bipartite(obj),
 };
-
 
 export function bipartite(obj) {
 	return new Bipartite(obj).render();

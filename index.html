@@ -16,10 +16,59 @@
 		</header>
 		<main>
 			<p>
-				CDemo is an open source, MIT-licensed JavaScript library for
+				CDemo is an open source, ISC-licensed JavaScript library for
 				rendering data structure diagrams and various data visualizations.
 				Below are some demos and API specifications.
 			</p>
+
+			<article id="getting_started">
+				<h2>Getting Started</h2>
+				<p>
+					CDemo is a vanilla JavaScript library. To use CDemo,
+					<a href="https://github.com/ketiboldiais/cdemo" target="_blank"
+						>download the source code</a
+					>, and link to the <code>cdemo.mjs</code> file in the relevant
+					HTML document. Because CDemo relies on D3, be sure to link to D3
+					as well. After these two files, link the JavaScript file
+					containing the CDemo code you'll write:
+				</p>
+				<pre class="language-html"><code>
+					&lt;script src=&quot;https://d3js.org/d3.v7.min.js&quot;&gt;&lt;/script&gt;
+					&lt;script type=&quot;module&quot; src=&quot;./cdemo/cdemo.mjs&quot;&gt;&lt;/script&gt;
+					&lt;script type="module" src=&quot;./myDemos.js&quot;&gt;&lt;/script&gt;
+				</code></pre>
+				<p>
+					Note that CDemo is built with ES6's module system, so the
+					<code>type="module"</code> attribute must be included.
+				</p>
+				<p>
+					CDemo works by hooking on to a <code>div</code> tag with an
+					<code>id</code> attribute. CDemo uses the
+					<var>id</var> attribute's value to identify the
+					<var>div</var> tag to render the SVG element in. Thus, if, in the
+					HTML document, we write:
+				</p>
+				<pre class="language-html"><code>
+					&lt;div id=&quot;myDemo&quot;&gt;&lt;/div&gt;
+				</code></pre>
+				<p>and in the linked JavaScript file, we write:</p>
+				<pre class="language-javascript"><code>
+					import { sequence } from "../cdemo/cdemo.mjs";
+
+					sequence({
+						id: 'myDemo',
+						data: [1,2,3,4,5,6,7,8,9]
+					})
+				</code></pre>
+				<p>we get:</p>
+				<div id="myDemo"></div>
+				<p>
+					Notice the <code>import</code> statement. While CDemo uses ES6
+					classes for overall structure, much of its API is designed with a
+					functional programming approach &mdash; import and call the
+					desired demo from <code>cdemo.mjs</code>.
+				</p>
+			</article>
 
 			<article id="scatter_plots">
 				<h2>Scatter Plots</h2>
