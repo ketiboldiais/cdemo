@@ -16,26 +16,50 @@
 		</header>
 		<main>
 			<p>
-				CDemo is an open source, ISC-licensed JavaScript library for
-				rendering data structure diagrams and various data visualizations.
-				Below are some demos and API specifications.
+				CDemo (<q>see-demo</q>) is an open source, MIT-licensed JavaScript
+				library for rendering data structure diagrams and various data
+				visualizations. Below are some demos and API specifications.
 			</p>
 
 			<article id="getting_started">
 				<h2>Getting Started</h2>
 				<p>
-					CDemo is a vanilla JavaScript library. To use CDemo,
-					<a href="https://github.com/ketiboldiais/cdemo" target="_blank"
-						>download the source code</a
-					>, and link to the <code>cdemo.mjs</code> file in the relevant
-					HTML document. Because CDemo relies on D3, be sure to link to D3
-					as well. After these two files, link the JavaScript file
-					containing the CDemo code you'll write:
+					CDemo is a vanilla JavaScript library. The easiest way to get set
+					up is by using a script tag. First, link to both
+					<code>d3</code> and <code>cdemo</code> as follows:
 				</p>
 				<pre class="language-html"><code>
 					&lt;script src=&quot;https://d3js.org/d3.v7.min.js&quot;&gt;&lt;/script&gt;
-					&lt;script type=&quot;module&quot; src=&quot;./cdemo/cdemo.mjs&quot;&gt;&lt;/script&gt;
+					&lt;script
+						type=&quot;module&quot;
+						src=&quot;https://www.unpkg.com/@ketiboldiais/cdemo@1.0.0/cdemo/cdemo.mjs&quot;&gt;
+					&lt;/script&gt;					
+				</code></pre>
+				<p>
+					Then, create a new JavaScript file to write the CDemo code in,
+					and link that file:
+				</p>
+				<pre class="language-html"><code>
+					&lt;script src=&quot;https://d3js.org/d3.v7.min.js&quot;&gt;&lt;/script&gt;
+					&lt;script
+						type=&quot;module&quot;
+						src=&quot;https://www.unpkg.com/@ketiboldiais/cdemo@1.0.0/cdemo/cdemo.mjs&quot;&gt;
+					&lt;/script&gt;					
 					&lt;script type="module" src=&quot;./myDemos.js&quot;&gt;&lt;/script&gt;
+				</code></pre>
+				<p>
+					Alternatively, the entire library can be installed locally with
+					<code>npm</code> by running:
+				</p>
+				<pre class="language-bash"><code>
+					npm i @ketiboldiais/cdemo
+				</code></pre>
+				<p>Link to the <var>cdemo</var> module as follows:</p>
+				<pre class="language-html"><code>
+					&lt;script 
+						type=&quot;module&quot;
+						src=&quot;./@ketiboldiais/cdemo/cdemo.mjs&quot;&gt;
+					&lt;/script&gt;
 				</code></pre>
 				<p>
 					Note that CDemo is built with ES6's module system, so the
@@ -44,9 +68,9 @@
 				<p>
 					CDemo works by hooking on to a <code>div</code> tag with an
 					<code>id</code> attribute. CDemo uses the
-					<var>id</var> attribute's value to identify the
-					<var>div</var> tag to render the SVG element in. Thus, if, in the
-					HTML document, we write:
+					<code>id</code> attribute's value to identify the
+					<code>div</code> tag to render the SVG element in. Thus, if, in
+					the HTML document, we write:
 				</p>
 				<pre class="language-html"><code>
 					&lt;div id=&quot;myDemo&quot;&gt;&lt;/div&gt;
@@ -64,9 +88,9 @@
 				<div id="myDemo"></div>
 				<p>
 					Notice the <code>import</code> statement. While CDemo uses ES6
-					classes for overall structure, much of its API is designed with a
-					functional programming approach &mdash; import and call the
-					desired demo from <code>cdemo.mjs</code>.
+					classes for overall structure, much of its API and implementation
+					details take a functional programming approach &mdash; import the
+					demo from <code>cdemo.mjs</code> and describe what it looks like.
 				</p>
 			</article>
 
@@ -152,23 +176,93 @@
 				</code></pre>
 			</article>
 
+			<article id="bar_plot">
+				<h2>Bar Plot</h2>
+				<p>
+					Bar plots are another simple data visualization tool. For
+					example, here is a plot of the number of character deaths for
+					each film in the <i>Saw</i> franchise. Each bar is labeled with
+					the film's corresponding <i>Rotten Tomatoes</i> rating.
+				</p>
+				<div id="barPlotDemo"></div>
+				<p>Code:</p>
+				<pre class="language-javascript"><code>
+					import { barPlot } from "../cdemo/cdemo.mjs";
+
+					barPlot({
+						xTickRotate : 45,
+						yLabel      : 'deaths',
+						xLabel      : 'film',
+						colorWeight : ["#FFE194", "#FF616D"],
+						id          : "barPlotDemo",
+						data        : [
+							[ "Saw (2004)"    , 6  , "51%" ],
+							[ "Saw II (2005)" , 8  , "37%" ],
+							[ "Saw III (2006)", 10 , "29%" ],
+							[ "Saw IV (2007)" , 11 , "19%" ],
+							[ "Saw V (2008)"  , 6  , "13%" ],
+							[ "Saw VI (2009)" , 13 , "40%" ],
+							[ "Saw 3D (2010)" , 27 , "10%" ],
+							[ "Jigsaw (2017)" , 17 , "31%" ],
+							[ "Spiral (2021)" , 8  , "37%" ],
+					]})
+				</code></pre>
+				<p>If we wanted more explicit data, we can write:</p>
+				<pre class="language-javascript"><code>
+					import { barPlot } from "../cdemo/cdemo.mjs";
+
+					barPlot({
+						xTickRotate : 45,
+						yLabel      : 'deaths',
+						xLabel      : 'film',
+						colorWeight : ["#FFE194", "#FF616D"],
+						id          : "barPlotDemo",
+						data        : [
+							{ x: "Saw (2004)"    , y: 6 , label: "51%" },
+							{ x: "Saw II (2005)" , y: 8 , label: "37%" },
+							{ x: "Saw III (2006)", y: 10, label: "29%" },
+							{ x: "Saw IV (2007)" , y: 11, label: "19%" },
+							{ x: "Saw V (2008)"  , y: 6 , label: "13%" },
+							{ x: "Saw VI (2009)" , y: 13, label: "40%" },
+							{ x: "Saw 3D (2010)" , y: 27, label: "10%" },
+							{ x: "Jigsaw (2017)" , y: 17, label: "31%" },
+							{ x: "Spiral (2021)" , y: 8 , label: "37%" },
+					]})
+				</code></pre>
+			</article>
+
 			<article id="plot">
 				<h2>2-Dimensional Plots</h2>
 				<p>CDemo can plot some simple graphs:</p>
 				<figure>
-					<div id="sinePlot"></div>
+					<div id="plotDemo"></div>
 				</figure>
-				<p>Code:</p>
+				<p>
+					Code (the use of the immediately-invoked function expression is
+					purely a style preference):
+				</p>
 				<pre class="language-javascript"><code>
-					import { plot } from "../cdemo/cdemo.mjs"
+					(function () {
+						const sin = (x) => Math.sin(x);
+						const negSin = (x) => -Math.sin(x);
+						const cos = (x) => Math.cos(x);
+						const negCos = (x) => -Math.cos(x);
+						const pi = Math.PI;
 
-					plot({
-						id        : "sinePlot",
-						fn        : (x) => Math.sin(x),
-						domain    : [-10, 10],
-						range     : [-4, 4],
-						precision : 100,
-					});      
+						plot({
+							id: "plotDemo",
+							domain: [-10, 10],
+							range: [-10, 10],
+							precision: 100,
+							functions: [
+								{ f: sin   , color: "#00A8CC" }, // blue  
+								{ f: negSin, color: "#AD62AA" }, // purple
+								{ f: cos   , color: "#E94560" }, // red   
+								{ f: negCos, color: "#29C7AC" }, // green 
+								{ f: pi    , color: "#BBBBBB", dash: 4 }, // grey
+							],
+						});
+					})();
 				</code></pre>
 			</article>
 
@@ -183,8 +277,9 @@
 					import { plot3d } from "../cdemo/cdemo.mjs"
 
 					plot3d({
-						id: "plot3dDemo",
-						fn: (x, y) => (x ** 2 - y ** 2) * 0.2,
+						id    : "plot3dDemo",
+						fn    : (x, y) => (x ** 2 - y ** 2),
+						scale : 0.25
 					})
 				</code></pre>
 			</article>
@@ -556,6 +651,7 @@
 
 					bipartite({
 						id: "bipartiteDemo",
+						palette: "pinkYellow",
 						data: {
 							nodes: [
 								{ node: 0, name: "Dan" },
@@ -600,7 +696,11 @@
 		</footer>
 		<script src="./assets/prism.js"></script>
 		<script src="https://d3js.org/d3.v7.min.js"></script>
-		<script type="module" src="./cdemo/cdemo.mjs"></script>
+		<!-- <script type="module" src="./cdemo/cdemo.mjs"></script> -->
+		<script
+			type="module"
+			src="https://www.unpkg.com/@ketiboldiais/cdemo@1.0.0/cdemo/cdemo.mjs"
+		></script>
 		<script type="module" src="./assets/demo.js"></script>
 	</body>
 </html>

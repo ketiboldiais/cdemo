@@ -13,7 +13,7 @@ export class Queue extends D3Base {
 
 		this.svg = () => this.setSVGDimensions(300, 300);
 
-		this.SVG_CONTAINER = this.generateSVGContainer(35, 13);
+		this.SVG_CONTAINER = this.generateSVGContainer(45, 15);
 
 		this.SVG = this.generateSVG();
 

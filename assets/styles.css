@@ -4,7 +4,8 @@
 }
 
 html {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 	font-size: 14px;
 }
 
@@ -42,7 +43,7 @@ header {
 	color: var(--header-text-color);
 	top: 0;
 	font-size: 2rem;
-	font-family: Georgia, 'Times New Roman', Times, serif;
+	font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 footer {
@@ -53,7 +54,6 @@ footer {
 	padding: 1em 0;
 }
 
-
 article {
 	margin-top: 2em;
 }
@@ -63,89 +63,22 @@ figure {
 	justify-content: center;
 }
 
-button { cursor: pointer; }
+button {
+	cursor: pointer;
+}
 
 .demo-container {
 	display: flex;
 	justify-content: center;
 }
 
-/* Language - JavaScript */
-pre.language-javascript {
-	color: white;
-	background-color: rgb(32, 32, 32);
-}
-code[class="language-javascript"]>.token.dom {color: rgb(195, 115, 3);}
-code[class="language-javascript"]>.token.comment,
-code[class="language-javascript"]>.token.block-comment {
-	color: rgb(163, 163, 163);
-}
-
-code[class="language-javascript"] .token.punctuation {
-	color: white;
-}
-
-code[class="language-javascript"]>.token.string,
-code[class="language-javascript"]>.token.char,
-code[class="language-javascript"]>.token.boolean,
-code[class="language-javascript"]>.token.number {
-	color: rgb(238, 172, 255);
-}
-code[class="language-javascript"]>.token.function {
-	color: rgb(255, 195, 42);
-}
-code[class="language-javascript"]>.token.operator {
-	color: rgb(255, 165, 101);
-}
-
-code[class="language-javascript"]>.token.property {
-	color: rgb(228, 237, 255);
-}
-
-code[class="language-javascript"]>.token.regex,
-
-code[class="language-javascript"]>.token.class-name,
-code[class="language-javascript"]>.token.symbol {
-	color: rgb(255, 102, 46);
-}
-code[class="language-javascript"]>.token.keyword {
-	color: cyan;
-}
-code[class="language-javascript"]>.token.control-flow {
-	color: greenyellow;
-	font-style: italic;
-}
-code[class="language-javascript"] .token.punctuation.brace-level-1,
-code[class="language-javascript"] .token.punctuation.brace-level-5,
-code[class="language-javascript"] .token.punctuation.brace-level-9 {
-	color: rgb(255, 123, 52);
-	opacity: 1;
-}
-code[class="language-javascript"]> .token.punctuation.brace-level-10,
-code[class="language-javascript"]> .token.punctuation.brace-level-2,
-code[class="language-javascript"]> .token.punctuation.brace-level-6 {
-	color: rgb(16, 255, 175);
-	opacity: 1;
-}
-code[class="language-javascript"]> .token.punctuation.brace-level-11,
-code[class="language-javascript"]> .token.punctuation.brace-level-3,
-code[class="language-javascript"]> .token.punctuation.brace-level-7 {
-	color: rgb(86, 136, 255);
-	opacity: 1;
-}
-code[class="language-javascript"]> .token.punctuation.brace-level-12,
-code[class="language-javascript"]> .token.punctuation.brace-level-4,
-code[class="language-javascript"]> .token.punctuation.brace-level-8 {
-	color: rgb(255, 131, 255);
-	opacity: 1;
-}
 /* Line numbers and buttons for code */
 pre {
 	width: auto;
 	height: auto;
 	text-align: left;
-	font-size: 0.8rem;
-	white-space:pre;
+	font-size: 0.7rem;
+	white-space: pre;
 	font-weight: normal;
 	word-spacing: normal;
 	word-break: normal;
@@ -161,7 +94,7 @@ pre {
 	margin: 0.5em auto;
 	padding: 0.5rem 0.6rem;
 	overflow: auto;
-	box-shadow: 0 2px 6px 0 rgba(0,0,0,0.2);
+	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
 	border-radius: 0.3em !important;
 }
 code {
@@ -257,5 +190,130 @@ div.code-toolbar > .toolbar > .toolbar-item > span:hover {
 	text-decoration: none;
 }
 
+/* Language - JavaScript */
+pre.language-javascript {
+	color: white;
+	background-color: rgb(32, 32, 32);
+}
+code[class="language-javascript"] > .token.dom {
+	color: rgb(195, 115, 3);
+}
+code[class="language-javascript"] > .token.comment,
+code[class="language-javascript"] > .token.block-comment {
+	color: rgb(163, 163, 163);
+}
+
+code[class="language-javascript"] .token.punctuation {
+	color: white;
+}
+
+code[class="language-javascript"] > .token.string,
+code[class="language-javascript"] > .token.char,
+code[class="language-javascript"] > .token.boolean,
+code[class="language-javascript"] > .token.number {
+	color: rgb(238, 172, 255);
+}
+code[class="language-javascript"] > .token.function {
+	color: rgb(255, 195, 42);
+}
+code[class="language-javascript"] > .token.operator {
+	color: rgb(255, 165, 101);
+}
+
+code[class="language-javascript"] > .token.property {
+	color: rgb(228, 237, 255);
+}
+
+code[class="language-javascript"] > .token.regex,
+code[class="language-javascript"] > .token.class-name,
+code[class="language-javascript"] > .token.symbol {
+	color: rgb(255, 102, 46);
+}
+code[class="language-javascript"] > .token.keyword {
+	color: cyan;
+}
+code[class="language-javascript"] > .token.control-flow {
+	color: greenyellow;
+	font-style: italic;
+}
+code[class="language-javascript"] .token.punctuation.brace-level-1,
+code[class="language-javascript"] .token.punctuation.brace-level-5,
+code[class="language-javascript"] .token.punctuation.brace-level-9 {
+	color: rgb(255, 123, 52);
+	opacity: 1;
+}
+code[class="language-javascript"] > .token.punctuation.brace-level-10,
+code[class="language-javascript"] > .token.punctuation.brace-level-2,
+code[class="language-javascript"] > .token.punctuation.brace-level-6 {
+	color: rgb(16, 255, 175);
+	opacity: 1;
+}
+code[class="language-javascript"] > .token.punctuation.brace-level-11,
+code[class="language-javascript"] > .token.punctuation.brace-level-3,
+code[class="language-javascript"] > .token.punctuation.brace-level-7 {
+	color: rgb(86, 136, 255);
+	opacity: 1;
+}
+code[class="language-javascript"] > .token.punctuation.brace-level-12,
+code[class="language-javascript"] > .token.punctuation.brace-level-4,
+code[class="language-javascript"] > .token.punctuation.brace-level-8 {
+	color: rgb(255, 131, 255);
+	opacity: 1;
+}
+
+/* Language - Bash */
+pre[class="language-bash"] {
+	background: rgb(36, 36, 36);
+	color: white;
+}
+
+.command-line-prompt {
+	border-right: 1px solid rgb(121, 121, 121);
+	display: block;
+	float: left;
+	font-size: 100%;
+	letter-spacing: -1px;
+	margin-right: 0.6em;
+	pointer-events: none;
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.command-line-prompt > span:before {
+	color: rgb(126, 207, 192);
+	content: " ";
+	display: block;
+	padding-right: 0.4em;
+}
+
+.command-line-prompt > span[data-user]:before {
+	content: "$";
+}
+
+/* Language - HTML */
+pre.language-html {
+	background-color: white;
+	color: var(--textColor);
+}
+code.language-html > .token.comment,
+code.language-html > .token.doctype {
+	color: rgb(145, 145, 145);
+}
+code.language-html > .token.tag {
+	color: rgb(0, 92, 157);
+}
+code.language-html > .token.tag .token.punctuation {
+	color: tomato;
+}
+
 /* Paragraph */
-p {margin: 1em 0;}
+p {
+	margin: 2em 0;
+}
+h1+p,h2+p,h3+p,h4+p,h5+p,h6+p {
+	margin-top: 0.8em;
+	padding-top: 0;
+}

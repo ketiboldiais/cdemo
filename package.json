@@ -1,14 +1,14 @@
 {
-  "name": "cdemo",
+  "name": "@ketiboldiais/cdemo",
   "version": "1.0.0",
   "description": "A library for math and computer science diagrams",
-  "main": "index.js",
+  "main": "./cdemo/cdemo.mjs",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node ./cdemo/cdemo.mjs"
   },
   "keywords": [],
-  "author": "",
+  "author": "ketiboldiais <numerstack@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -17,5 +17,6 @@
   "bugs": {
     "url": "https://github.com/numerstack/cdemo/issues"
   },
-  "homepage": "https://github.com/numerstack/cdemo#readme"
+  "homepage": "https://ketiboldiais.github.io/cdemo/",
+  "devDependencies": {}
 }

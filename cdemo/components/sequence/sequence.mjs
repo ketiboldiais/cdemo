@@ -32,13 +32,13 @@ export class Sequence extends D3Base {
 		this.COLORS = {
 			frameColor: this.OBJ.palette
 				? this.palette(this.OBJ.palette).fill
-				: this.palette("blueScheme").fill,
+				: this.palette("plainScheme").fill,
 			frameStrokeColor: this.OBJ.palette
 				? this.palette(this.OBJ.palette).stroke
-				: this.palette("blueScheme").stroke,
+				: this.palette("plainScheme").stroke,
 			textColor: this.OBJ.palette
 				? this.palette(this.OBJ.palette).text
-				: this.palette("blueScheme").text,
+				: this.palette("plainScheme").text,
 		};
 	}
 

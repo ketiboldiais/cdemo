@@ -15,14 +15,37 @@ import { graph } from "../cdemo/cdemo.mjs";
 import { scatterPlot } from "../cdemo/cdemo.mjs";
 import { linePlot } from "../cdemo/cdemo.mjs";
 import { bipartite } from "../cdemo/cdemo.mjs";
+import { barPlot } from "../cdemo/cdemo.mjs";
+
+barPlot({
+	xTickRotate: 45,
+	yLabel: 'deaths',
+	xLabel: 'film',
+	colorWeight: ["#FFE194", "#FF616D"],
+	id: "barPlotDemo",
+	data: [
+		["Saw (2004)", 6, "51%"],
+		[ "Saw II (2005)", 8, "37%" ],
+		[ "Saw III (2006)", 10, "29%"],
+		[ "Saw IV (2007)", 11, "19%"],
+		[ "Saw V (2008)", 6, "13%"],
+		[ "Saw VI (2009)", 13, "40%" ],
+		[ "Saw 3D (2010)", 27, "10%"],
+		[ "Jigsaw (2017)", 17, "31%" ],
+		[ "Spiral (2021)", 8, "37%" ],
+	],
+})
+
 
 sequence({
-	id: 'myDemo',
-	data: [1,2,3,4,5,6,7,8,9]
-})
+	palette: "blueScheme",
+	id: "myDemo",
+	data: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+});
 
 bipartite({
 	id: "bipartiteDemo",
+	palette: "pinkYellow",
 	data: {
 		nodes: [
 			{ node: 0, name: "Dan" },
@@ -294,7 +317,8 @@ stack({
 
 plot3d({
 	id: "plot3dDemo",
-	fn: (x, y) => (x ** 2 - y ** 2) * 0.2,
+	fn: (x, y) => x ** 2 - y ** 2,
+	scale: 0.25,
 });
 
 linkedList({
@@ -302,16 +326,33 @@ linkedList({
 	data: [2, 3, 9, 11, 17, 20],
 });
 
-plot({
-	id: "sinePlot",
-	fn: (x) => Math.sin(x),
-	domain: [-10, 10],
-	range: [-4, 4],
-	precision: 100,
-});
+(function () {
+	const sin = (x) => Math.sin(x);
+	const negSin = (x) => -Math.sin(x);
+	const cos = (x) => Math.cos(x);
+	const negCos = (x) => -Math.cos(x);
+	// const negCos = (x) => 1/x;
+	const pi = Math.PI;
+
+	plot({
+		id: "plotDemo",
+		domain: [-10, 10],
+		range: [-10, 10],
+		precision: 100,
+		functions: [
+			{ f: sin, color: "#68b700" },
+			{ f: negSin, color: "#AD62AA" },
+			{ f: cos, color: "#E94560" },
+			{ f: negCos, color: "#29C7AC" },
+			{ f: pi, color: "#BBBBBB", dash: 4 },
+		],
+	});
+})();
 
 truthTable({
 	id: "flipFlopGate",
+	vars: ["a", "b", "c"],
+	functions: [(a, b, c) => a && b && c],
 	focus: [
 		[7, 5],
 		[7, 6],

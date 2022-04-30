@@ -1,12 +1,14 @@
 import D3Base from "../../core/d3_base/D3Base.mjs";
+import setValue from "../../core/utils/setValue.mjs";
 export class Plot3d extends D3Base {
 	constructor(obj) {
 		super(obj);
 		this.margins = () => this.setMargin(20, 20, 20, 20);
 		this.svg = () => this.setSVGDimensions(400, 400);
-		this.SVG_CONTAINER = this.generateSVGContainer(70, 70);
+		this.SVG_CONTAINER = this.generateSVGContainer(70, 50);
 		this.SVG = this.generateSVG();
 		this.userFunction = obj.fn;
+		this.scale = setValue(obj.scale, 1);
 	}
 
 	generateDataFromUserFunction(func) {
@@ -15,7 +17,7 @@ export class Plot3d extends D3Base {
 			let f0 = [];
 			output.push(f0);
 			for (let y = -20; y < 20; y++) {
-				f0.push(func(x, y));
+				f0.push(func(x, y) * this.scale);
 			}
 		}
 		return output;

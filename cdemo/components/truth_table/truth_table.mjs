@@ -4,6 +4,10 @@ export class TruthTable extends CSMD {
 	constructor(obj) {
 		super(obj);
 
+		this.vars = obj.vars;
+		this.varCount = obj.vars.length;
+		this.functions = obj.functions;
+
 		this.color_array = ["#F9ECEC", "#F0D9DA", "#C8D9EB", "#ECF2F9"];
 
 		this.TABLE_styles = {
@@ -71,6 +75,31 @@ export class TruthTable extends CSMD {
 			padding: "0 0.5rem",
 			border: "none",
 		};
+	}
+	generateTruthTableData() {
+		let formula = (a, b) => {
+			return a && b;
+		};
+		let formulas = [formula];
+		let truthTableData = [];
+		let temp, a, i, b;
+		let columnCount = this.varCount * this.varCount;
+		for (i = 0; i < columnCount; i++) {
+			let rowData = [];
+			temp = i;
+			a = i % 2;
+			rowData.push(a);
+			temp /= 2;
+			temp = temp << 0;
+			b = temp % 2;
+			rowData.push(b);
+			for (let j = 0; j < this.functions.length; j++) {
+				let val = this.functions[j](a,b);
+				rowData.push(val);
+			}
+			truthTableData[i] = rowData;
+		}
+		console.log(truthTableData);
 	}
 
 	render() {

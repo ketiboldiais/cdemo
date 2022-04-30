@@ -32,23 +32,38 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import D3Base from "../../core/d3_base/D3Base.mjs";
 import { px } from "../../core/utils/size.mjs";
 import { translate } from "../../core/utils/translate.mjs";
+import { palette } from "../../core/utils/color.mjs";
+import setValue from "../../core/utils/setValue.mjs";
 
 export class Bipartite extends D3Base {
 	constructor(obj) {
 		super(obj);
 		this.margins = () => this.setMargin(40, 40, 40, 40);
 		this.svg = () => this.setSVGDimensions(400, 430);
-		this.SVG_CONTAINER = this.generateSVGContainer(50, 50);
+		this.SVG_CONTAINER = this.generateSVGContainer(60, 60);
 		this.SVG = this.generateSVG();
 		this.data = obj.data;
 		this.nodeCount = obj.data.nodes.length;
+		this.colorPalette = setValue(palette(obj.palette), palette("plain"));
 
-		this.edgeStrokeColor = '#D885A3';
-		this.nodeFillColor = '#F7ECDE';
-		this.circleStrokeWidth = px(1);
-		this.nodeStrokeColor = 'firebrick';
-		this.nodeRadius = 5;
-		this.nodeTextColor = 'black';
+		this.edgeStrokeColor = setValue(
+			obj.edgeStrokeColor,
+			this.colorPalette.secondaryStrokeColor,
+		);
+		this.nodeFillColor = setValue(
+			obj.nodeFillColor,
+			this.colorPalette.secondaryFillColor,
+		);
+		this.circleStrokeWidth = setValue(obj.circleStrokeWidth, px(1));
+		this.nodeStrokeColor = setValue(
+			obj.nodeStrokeColor,
+			this.colorPalette.primaryStrokeColor,
+		);
+		this.nodeRadius = setValue(obj.nodeRadius, 5);
+		this.nodeTextColor = setValue(
+			obj.nodeTextColor,
+			this.colorPalette.primaryTextColor,
+		);
 
 		this.x0 = 0;
 		this.y0 = 0;
@@ -56,7 +71,7 @@ export class Bipartite extends D3Base {
 		this.y1 = this.svg().height; // extent
 		this.dx = 5; // node width
 		// node padding
-		this.py = obj.nodePadding ? obj.nodePadding : this.nodeCount*4;
+		this.py = obj.nodePadding ? obj.nodePadding : this.nodeCount * 4;
 		this.dy = this.py ? this.py : 8;
 		this.id = (d) => d.index; // default id
 		this.align = this.justify;
@@ -87,7 +102,7 @@ export class Bipartite extends D3Base {
 			.append("path")
 			.attr("d", (d) => linkGen(d))
 			.attr("fill", "none")
-			.attr('stroke-width', d => d.value)
+			.attr("stroke-width", (d) => d.value)
 			.attr("stroke", this.edgeStrokeColor);
 		const node = this.SVG.selectAll(".node")
 			.data(this.nodes)
@@ -97,14 +112,14 @@ export class Bipartite extends D3Base {
 		// add circles for nodes
 		node
 			.append("circle")
-			.attr('stroke-width', this.circleStrokeWidth)
+			.attr("stroke-width", this.circleStrokeWidth)
 			.attr("stroke", this.nodeStrokeColor)
 			.attr("fill", this.nodeFillColor)
 			.attr("r", this.nodeRadius);
 		node
 			.append("text")
 			.attr("fill", this.nodeTextColor)
-			.attr("dy", -this.nodeRadius*2)
+			.attr("dy", -this.nodeRadius * 2)
 			.attr("text-anchor", "middle")
 			.text((d) => d.name);
 	}

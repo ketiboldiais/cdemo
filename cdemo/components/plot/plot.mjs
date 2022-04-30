@@ -1,12 +1,13 @@
 import D3Base from "../../core/d3_base/D3Base.mjs";
+import { arrayOfPropertyValues } from "../../core/utils/arrayOfPropertyValues.mjs";
 import setValue from "../../core/utils/setValue.mjs";
 
 export class Plot extends D3Base {
 	constructor(obj) {
 		super(obj);
-		this.margins = () => this.setMargin(30, 30, 30, 30);
-		this.svg = () => this.setSVGDimensions(400, 400);
-		this.SVG_CONTAINER = this.generateSVGContainer(60, 60);
+		this.margins = () => this.setMargin(50, 50, 50, 50);
+		this.svg = () => this.setSVGDimensions(500, 500);
+		this.SVG_CONTAINER = this.generateSVGContainer(90, 90);
 		this.SVG = this.generateSVG();
 
 		this.xAxisPosition = setValue(obj.xAxisPosition, "center");
@@ -15,6 +16,9 @@ export class Plot extends D3Base {
 			? this.OBJ.precision
 			: 100;
 
+		this.plotLineColor = setValue(this.plotLineColor, "firebrick");
+		this.plotLineColors = arrayOfPropertyValues(obj.functions, "color");
+
 		this.COLORS = {
 			plotColor: "firebrick",
 			yAxisColor: "#AECBD6",
@@ -22,7 +26,7 @@ export class Plot extends D3Base {
 		};
 
 		// fn is a mathematical function written in JavaScript
-		this.f = this.OBJ.fn;
+		this.userFunctions = arrayOfPropertyValues(obj.functions, "f");
 
 		this.DATA = {
 			domain: d3.ticks(
@@ -62,17 +66,11 @@ export class Plot extends D3Base {
 		};
 
 		// Data point generator
-		this.DATAPOINTS = this.generateData();
+		this.funcGroupData = this.generateFunctionData();
+	}
 
-		// Line generator
-		this.LINE = d3
-			.line()
-			.x((d) => this.SCALE.xAxis(d[0]))
-			.y((d) => this.SCALE.yAxis(d[1]));
-
-		// Clip Path
-		this.CLIP_PATH = this.SVG
-			.append("clipPath")
+	setPlotBoundaries() {
+		this.SVG.append("clipPath")
 			.attr("id", "chart-area")
 			.append("rect")
 			.attr("x", 0)
@@ -81,17 +79,73 @@ export class Plot extends D3Base {
 			.attr("height", this.svg().height);
 	}
 
-	generateData() {
+	generateFunctionData() {
+		let group = {};
+		let groups = [];
+		let data = [];
+		if (this.userFunctions === undefined) {
+			return;
+		} else {
+			for (let i = 0; i < this.userFunctions.length; i++) {
+				let func = this.userFunctions[i];
+				data.push(this.generateDataFromUserFunction(func));
+				group = {
+					group: i,
+					data: this.generateDataFromUserFunction(func),
+					...this.OBJ.functions[i],
+				};
+				groups.push(group);
+			}
+		}
+		return groups;
+	}
+
+	generateFunctionPlot() {
+		for (let i = 0; i < this.funcGroupData.length; i++) {
+			this.SVG.append("path")
+				.datum(this.funcGroupData[i].data)
+				.attr("shape-rendering", "geometricPrecision")
+				.attr("clip-path", `url(#chart-area)`)
+				.attr("fill", "none")
+				.attr("stroke", this.funcGroupData[i].color)
+				.attr(
+					"stroke-width",
+					setValue(this.funcGroupData[i].strokeWidth, 2),
+				)
+				.attr("stroke-dasharray", setValue(this.funcGroupData[i].dash, 0))
+				.attr("d", this.generate_d_attribute());
+		}
+	}
+
+	generate_d_attribute(d) {
+		return d3
+			.line()
+			.x((d) => {
+				return this.SCALE.xAxis(d.x);
+			})
+			.y((d) => {
+				return this.SCALE.yAxis(d.y);
+			});
+	}
+
+	generateDataFromUserFunction(f) {
 		let dataset = [];
 		let x, y;
-		for (let i = 0; i <= this.DATA.domain.length-1; i++) {
-			x = this.DATA.domain[i];
-			y = this.f(x);
+		let j = 0;
+		for (let i = 0; i <= this.DATA.domain.length - 1; i++) {
+			if (typeof f !== "function") {
+				x = f;
+				y = this.DATA.domain[i];
+			} else {
+				x = this.DATA.domain[i];
+				y = f(x);
+			}
 			if (isNaN(y) || !isFinite(y)) {
 				continue;
 			} else {
-				dataset.push([x, y]);
+				dataset.push({ x: x, y: y });
 			}
+			j++;
 		}
 		return dataset;
 	}
@@ -114,43 +168,106 @@ export class Plot extends D3Base {
 		return position;
 	}
 
-	render() {
-		const xAxis = d3
-			.axisBottom(this.SCALE.xAxis)
-			.tickSizeInner(3)
-			.tickSizeOuter(0);
-
+	addYAxis() {
 		const yAxis = d3
 			.axisLeft(this.SCALE.yAxis)
 			.tickSizeInner(3)
 			.tickSizeOuter(0);
-
-		// Append x-axis
-		const append_xAxis = this.SVG.append("g")
-			.attr("transform", `translate(0, ${this.xAxisShift()})`)
-			.style("font-size", this.FONTS.size.medium)
-			.style("color", this.COLORS.xAxisColor)
-			.call(xAxis);
 
 		// Append y-axis
 		const append_yAxis = this.SVG.append("g")
 			.attr("transform", `translate(${this.svg().width / 2}, ${0})`)
 			.style("font-size", this.FONTS.size.medium)
 			.style("color", this.COLORS.yAxisColor)
+			.attr("class", "yAxis")
 			.call(yAxis);
 
-		const xAxis_ticks = append_xAxis.selectAll(".tick").selectAll("line");
 		const yAxis_ticks = append_yAxis.selectAll(".tick").selectAll("line");
-		xAxis_ticks.attr("y1", -3);
 		yAxis_ticks.attr("x1", 3);
 
 		// generate path
-		this.SVG.append("path")
-			.datum(this.DATAPOINTS)
-			.attr("clip-path", `url(#chart-area)`)
-			.attr("fill", "none")
-			.attr("stroke", this.COLORS.plotColor)
-			.attr("stroke-width", 1)
-			.attr("d", this.LINE);
+		append_yAxis
+			.select("path")
+			.attr("marker-end", "url(#yArrowTop)")
+			.attr("marker-start", "url(#yArrowBottom)");
+	}
+
+	addXAxis() {
+		const xAxis = d3
+			.axisBottom(this.SCALE.xAxis)
+			.tickSizeInner(3)
+			.tickSizeOuter(0);
+		// Append x-axis
+		const append_xAxis = this.SVG.append("g")
+			.attr("transform", `translate(0, ${this.xAxisShift()})`)
+			.style("font-size", this.FONTS.size.medium)
+			.style("color", this.COLORS.xAxisColor)
+			.attr("class", "xAxis")
+			.call(xAxis);
+		const xAxis_ticks = append_xAxis.selectAll(".tick").selectAll("line");
+		append_xAxis
+			.select("path")
+			.attr("marker-end", "url(#xArrowLeft)")
+			.attr("marker-start", "url(#xArrowRight)");
+		xAxis_ticks.attr("y1", -3);
+	}
+
+	removeEndTicks() {
+		const xTickCount = d3.selectAll("g.xAxis .tick")._groups[0].length;
+		const yTickCount = d3.selectAll("g.yAxis .tick")._groups[0].length;
+		this.SVG.selectAll("g.xAxis .tick line").each(function (d, i) {
+			if (i === 0 || i === xTickCount - 1) {
+				this.remove();
+			}
+		});
+		this.SVG.selectAll("g.yAxis .tick line").each(function (d, i) {
+			if (i === 0 || i === yTickCount - 1) {
+				this.remove();
+			}
+		});
+	}
+
+	render() {
+		this.setPlotBoundaries();
+		this.insertArrowDefinitions({
+			id: "xArrowLeft",
+			refX: 8,
+			refY: 0,
+			markerWidth: 6,
+			markerHeight: 6,
+			orient: "auto",
+			fill: this.COLORS.xAxisColor,
+		});
+		this.insertArrowDefinitions({
+			id: "xArrowRight",
+			refX: 8,
+			refY: 0,
+			markerWidth: 6,
+			markerHeight: 6,
+			orient: "0",
+			fill: this.COLORS.xAxisColor,
+		});
+		this.insertArrowDefinitions({
+			id: "yArrowTop",
+			refX: 8,
+			refY: 0,
+			markerWidth: 6,
+			markerHeight: 6,
+			orient: "90",
+			fill: this.COLORS.xAxisColor,
+		});
+		this.insertArrowDefinitions({
+			id: "yArrowBottom",
+			refX: 8,
+			refY: 0,
+			markerWidth: 6,
+			markerHeight: 6,
+			orient: "-90",
+			fill: this.COLORS.xAxisColor,
+		});
+		this.addXAxis();
+		this.addYAxis();
+		this.removeEndTicks();
+		this.generateFunctionPlot();
 	}
 }

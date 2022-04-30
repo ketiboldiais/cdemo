@@ -2,12 +2,18 @@ import CSMD from "../csmd/csmd.mjs";
 import { isNotNull } from "../utils/isNotNull.mjs";
 import { isNotUndefined } from "../utils/isNotUndefined.mjs";
 import setValue from "../utils/setValue.mjs";
+import { colorSchemes } from "../utils/color.mjs";
 
 export default class D3Base extends CSMD {
 	constructor(obj) {
 		super(obj);
 		this.OBJ = obj;
 		this.data = obj.data;
+
+		this.marginTop = setValue(obj.marginTop, null);
+		this.marginLeft = setValue(obj.marginLeft, null);
+		this.marginBottom = setValue(obj.marginBottom, null);
+		this.marginRight = setValue(obj.marginRight, null);
 
 		this.mainFontSize = setValue(this.OBJ.mainFontSize, "0.8rem");
 
@@ -23,8 +29,7 @@ export default class D3Base extends CSMD {
 		this.D3_CONTAINER.style(
 			"display",
 			setValue(this.OBJ.display, "flex"),
-		)
-			.style(
+		).style(
 			"justify-content",
 			setValue(this.OBJ.justifyContent, "center"),
 		);
@@ -35,56 +40,6 @@ export default class D3Base extends CSMD {
 		};
 	}
 
-	colorSchemes = () => {
-		return {
-			plainScheme: {
-				fill: "white",
-				stroke: "black",
-				text: "black",
-			},
-			blueScheme: {
-				fill: "#ebffff",
-				stroke: "#1572A1",
-				text: "#1572A1",
-			},
-			mintScheme: {
-				fill: "#EDFFEC",
-				stroke: "#1597BB",
-				text: "#1597BB",
-			},
-			blackScheme: {
-				fill: "#000",
-				stroke: "#fff",
-				text: "#fff",
-			},
-			greyScheme: {
-				fill: "lightgrey",
-				stroke: "slategrey",
-				text: "slategrey",
-			},
-			greenScheme: {
-				fill: "#f6ffe4",
-				stroke: "#4E9F3D",
-				text: "#4E9F3D",
-			},
-			yellowScheme: {
-				fill: "#FFFDDE",
-				stroke: "#EEBB4D",
-				text: "#BE8C63",
-			},
-			orangeBlackScheme: {
-				fill: "#393E46",
-				stroke: "#FA7D09",
-				text: "#FFD700",
-			},
-			darkRedScheme: {
-				fill: "orangered",
-				stroke: "firebrick",
-				text: "white",
-			},
-		};
-	};
-
 	palette = (color) => {
 		let palette;
 		if (color === undefined || color === null) {
@@ -92,28 +47,28 @@ export default class D3Base extends CSMD {
 		}
 		switch (color) {
 			case "blueScheme":
-				palette = this.colorSchemes().blueScheme;
+				palette = colorSchemes.blueScheme;
 				break;
 			case "mintScheme":
-					palette = this.colorSchemes().mintScheme;
-					break;
+				palette = colorSchemes.mintScheme;
+				break;
 			case "greenScheme":
-				palette = this.colorSchemes().greenScheme;
+				palette = colorSchemes.greenScheme;
 				break;
 			case "darkRedScheme":
-				palette = this.colorSchemes().darkRedScheme;
+				palette = colorSchemes.darkRedScheme;
 				break;
 			case "yellowScheme":
-				palette = this.colorSchemes().yellowScheme;
+				palette = colorSchemes.yellowScheme;
 				break;
 			case "plainScheme":
-				palette = this.colorSchemes().plainScheme;
+				palette = colorSchemes.plainScheme;
 				break;
 			case "greyScheme":
-				palette = this.colorSchemes().greyScheme;
+				palette = colorSchemes.greyScheme;
 				break;
 			case "orangeBlackScheme":
-				palette = this.colorSchemes().orangeBlackScheme;
+				palette = colorSchemes.orangeBlackScheme;
 				break;
 			default:
 				palette = {
@@ -151,11 +106,24 @@ export default class D3Base extends CSMD {
 	}
 
 	setMargin(top, right, bottom, left) {
-		const userMarginTop = this.OBJ.margins ? this.OBJ.margins[0] : null;
-		const userMarginLeft = this.OBJ.margins ? this.OBJ.margins[1] : null;
-		const userMarginBottom = this.OBJ.margins ? this.OBJ.margins[2] : null;
-		const userMarginRight = this.OBJ.margins ? this.OBJ.margins[3] : null;
-		const margins = {
+		let userMarginTop;
+		let userMarginLeft;
+		let userMarginBottom;
+		let userMarginRight;
+
+		if (this.OBJ.margins) {
+			userMarginTop = this.OBJ.margins[0];
+			userMarginLeft = this.OBJ.margins[1];
+			userMarginBottom = this.OBJ.margins[2];
+			userMarginRight = this.OBJ.margins[3];
+		} else {
+			userMarginTop = this.marginTop;
+			userMarginLeft = this.marginLeft;
+			userMarginBottom = this.marginBottom;
+			userMarginRight = this.marginRight;
+		}
+
+		let margins = {
 			top: setValue(userMarginTop, top),
 			left: setValue(userMarginLeft, left),
 			bottom: setValue(userMarginBottom, bottom),
@@ -181,16 +149,13 @@ export default class D3Base extends CSMD {
 			return `${defaultValue}%`;
 		}
 	}
-	setContainerWidthDefault(defaultValue) {
+
+	setContainerHeightDefault(defaultValue) {
 		if (isNotNull(this.OBJ.height) && isNotUndefined(this.OBJ.height)) {
 			return `${this.OBJ.height}%`;
 		} else {
 			return `${defaultValue}%`;
 		}
-	}
-
-	setContainerHeightDefault(defaultValue) {
-		return setValue(this.OBJ.height, `${defaultValue}%`);
 	}
 
 	generateSVGContainer(a, b) {
